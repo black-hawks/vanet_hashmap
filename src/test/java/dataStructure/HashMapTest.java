@@ -3,6 +3,11 @@ package dataStructure;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class HashMapTest {
 
     @Test
@@ -13,9 +18,9 @@ public class HashMapTest {
         map.put("B", 2);
         map.put("C", 3);
 
-        Assertions.assertEquals(1, map.get("A"));
-        Assertions.assertEquals(2, map.get("B"));
-        Assertions.assertEquals(3, map.get("C"));
+        assertEquals(1, map.get("A"));
+        assertEquals(2, map.get("B"));
+        assertEquals(3, map.get("C"));
     }
 
     @Test
@@ -29,8 +34,8 @@ public class HashMapTest {
         map.remove("B");
 
         Assertions.assertNull(map.get("B"));
-        Assertions.assertEquals(1, map.get("A"));
-        Assertions.assertEquals(3, map.get("C"));
+        assertEquals(1, map.get("A"));
+        assertEquals(3, map.get("C"));
     }
 
     @Test
@@ -40,7 +45,7 @@ public class HashMapTest {
         map.put("A", 1);
         map.put("A", 2);
 
-        Assertions.assertEquals(2, map.get("A"));
+        assertEquals(2, map.get("A"));
     }
 
     @Test
@@ -54,11 +59,89 @@ public class HashMapTest {
         map.put(5, "E");
         map.put(6, "F");
 
-        Assertions.assertEquals("A", map.get(1));
-        Assertions.assertEquals("B", map.get(2));
-        Assertions.assertEquals("C", map.get(3));
-        Assertions.assertEquals("D", map.get(4));
-        Assertions.assertEquals("E", map.get(5));
-        Assertions.assertEquals("F", map.get(6));
+        assertEquals("A", map.get(1));
+        assertEquals("B", map.get(2));
+        assertEquals("C", map.get(3));
+        assertEquals("D", map.get(4));
+        assertEquals("E", map.get(5));
+        assertEquals("F", map.get(6));
+    }
+
+    @Test
+    public void testKeysIterator() {
+        HashMap<String, Integer> map = new HashMap<>(3);
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 3);
+
+        // Test keys() iterator
+        Iterator<String> keysIterator = map.keys();
+        assertTrue(keysIterator.hasNext());
+        assertEquals("one", keysIterator.next());
+        assertTrue(keysIterator.hasNext());
+        assertEquals("two", keysIterator.next());
+        assertTrue(keysIterator.hasNext());
+        assertEquals("three", keysIterator.next());
+        assertFalse(keysIterator.hasNext());
+        try {
+            keysIterator.next();
+            fail("Expected NoSuchElementException to be thrown");
+        } catch (NoSuchElementException e) {
+            // Test passed
+        }
+    }
+
+    @Test
+    public void testValuesIterator() {
+        HashMap<String, Integer> map = new HashMap<>(3);
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 3);
+
+        // Test values() iterator
+        Iterator<Integer> valuesIterator = map.values();
+        assertTrue(valuesIterator.hasNext());
+        assertEquals(Integer.valueOf(1), valuesIterator.next());
+        assertTrue(valuesIterator.hasNext());
+        assertEquals(Integer.valueOf(2), valuesIterator.next());
+        assertTrue(valuesIterator.hasNext());
+        assertEquals(Integer.valueOf(3), valuesIterator.next());
+        assertFalse(valuesIterator.hasNext());
+        try {
+            valuesIterator.next();
+            fail("Expected NoSuchElementException to be thrown");
+        } catch (NoSuchElementException e) {
+            // Test passed
+        }
+    }
+
+    @Test
+    public void testEntriesIterator() {
+        HashMap<String, Integer> map = new HashMap<>(3);
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 3);
+
+        // Test entries() iterator
+        Iterator<Entry<String, Integer>> entriesIterator = map.entries();
+        assertTrue(entriesIterator.hasNext());
+        Entry<String, Integer> entry1 = entriesIterator.next();
+        assertEquals("one", entry1.getKey());
+        assertEquals(Integer.valueOf(1), entry1.getValue());
+        assertTrue(entriesIterator.hasNext());
+        Entry<String, Integer> entry2 = entriesIterator.next();
+        assertEquals("two", entry2.getKey());
+        assertEquals(Integer.valueOf(2), entry2.getValue());
+        assertTrue(entriesIterator.hasNext());
+        Entry<String, Integer> entry3 = entriesIterator.next();
+        assertEquals("three", entry3.getKey());
+        assertEquals(Integer.valueOf(3), entry3.getValue());
+        assertFalse(entriesIterator.hasNext());
+        try {
+            entriesIterator.next();
+            fail("Expected NoSuchElementException to be thrown");
+        } catch (NoSuchElementException e) {
+            // Test passed
+        }
     }
 }
