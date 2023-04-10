@@ -1,4 +1,4 @@
-package dataStructure;
+package dataStructure.hashMap;
 
 class Node<K, V> {
     K key;

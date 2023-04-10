@@ -1,4 +1,4 @@
-package dataStructure;
+package dataStructure.hashMap;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,12 +12,13 @@ public class HashMapTest {
 
     @Test
     public void testPutAndGet() {
-        HashMap<String, Integer> map = new HashMap<>(10);
+        HashMap<String, Integer> map = new HashMap<>();
 
         map.put("A", 1);
         map.put("B", 2);
         map.put("C", 3);
 
+        assertEquals(3, map.size());
         assertEquals(1, map.get("A"));
         assertEquals(2, map.get("B"));
         assertEquals(3, map.get("C"));
@@ -25,14 +26,14 @@ public class HashMapTest {
 
     @Test
     public void testRemove() {
-        HashMap<String, Integer> map = new HashMap<>(10);
+        HashMap<String, Integer> map = new HashMap<>();
 
         map.put("A", 1);
         map.put("B", 2);
         map.put("C", 3);
 
         map.remove("B");
-
+        assertEquals(2, map.size());
         Assertions.assertNull(map.get("B"));
         assertEquals(1, map.get("A"));
         assertEquals(3, map.get("C"));
@@ -40,17 +41,18 @@ public class HashMapTest {
 
     @Test
     public void testOverwrite() {
-        HashMap<String, Integer> map = new HashMap<>(10);
+        HashMap<String, Integer> map = new HashMap<>();
 
         map.put("A", 1);
         map.put("A", 2);
 
         assertEquals(2, map.get("A"));
+        assertEquals(1, map.size());
     }
 
     @Test
     public void testCollisions() {
-        HashMap<Integer, String> map = new HashMap<>(5);
+        HashMap<Integer, String> map = new HashMap<>();
 
         map.put(1, "A");
         map.put(2, "B");
@@ -59,6 +61,7 @@ public class HashMapTest {
         map.put(5, "E");
         map.put(6, "F");
 
+        assertEquals(6, map.size());
         assertEquals("A", map.get(1));
         assertEquals("B", map.get(2));
         assertEquals("C", map.get(3));
@@ -68,8 +71,24 @@ public class HashMapTest {
     }
 
     @Test
+    void testResize() {
+        HashMap<String, Integer> map = new HashMap<>(4);
+        map.put("apple", 1);
+        map.put("banana", 2);
+        map.put("cherry", 3);
+        map.put("date", 4);
+        map.put("elderberry", 5);
+        assertEquals(5, map.size());
+        assertEquals(1, map.get("apple"));
+        assertEquals(2, map.get("banana"));
+        assertEquals(3, map.get("cherry"));
+        assertEquals(4, map.get("date"));
+        assertEquals(5, map.get("elderberry"));
+    }
+
+    @Test
     public void testKeysIterator() {
-        HashMap<String, Integer> map = new HashMap<>(3);
+        HashMap<String, Integer> map = new HashMap<>();
         map.put("one", 1);
         map.put("two", 2);
         map.put("three", 3);
@@ -101,11 +120,11 @@ public class HashMapTest {
         // Test values() iterator
         Iterator<Integer> valuesIterator = map.values();
         assertTrue(valuesIterator.hasNext());
+        assertEquals(Integer.valueOf(3), valuesIterator.next());
+        assertTrue(valuesIterator.hasNext());
         assertEquals(Integer.valueOf(1), valuesIterator.next());
         assertTrue(valuesIterator.hasNext());
         assertEquals(Integer.valueOf(2), valuesIterator.next());
-        assertTrue(valuesIterator.hasNext());
-        assertEquals(Integer.valueOf(3), valuesIterator.next());
         assertFalse(valuesIterator.hasNext());
         try {
             valuesIterator.next();
@@ -126,16 +145,16 @@ public class HashMapTest {
         Iterator<Entry<String, Integer>> entriesIterator = map.entries();
         assertTrue(entriesIterator.hasNext());
         Entry<String, Integer> entry1 = entriesIterator.next();
-        assertEquals("one", entry1.getKey());
-        assertEquals(Integer.valueOf(1), entry1.getValue());
+        assertEquals("three", entry1.getKey());
+        assertEquals(Integer.valueOf(3), entry1.getValue());
         assertTrue(entriesIterator.hasNext());
         Entry<String, Integer> entry2 = entriesIterator.next();
-        assertEquals("two", entry2.getKey());
-        assertEquals(Integer.valueOf(2), entry2.getValue());
+        assertEquals("one", entry2.getKey());
+        assertEquals(Integer.valueOf(1), entry2.getValue());
         assertTrue(entriesIterator.hasNext());
         Entry<String, Integer> entry3 = entriesIterator.next();
-        assertEquals("three", entry3.getKey());
-        assertEquals(Integer.valueOf(3), entry3.getValue());
+        assertEquals("two", entry3.getKey());
+        assertEquals(Integer.valueOf(2), entry3.getValue());
         assertFalse(entriesIterator.hasNext());
         try {
             entriesIterator.next();

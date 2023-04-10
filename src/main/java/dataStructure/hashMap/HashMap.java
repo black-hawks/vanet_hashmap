@@ -1,16 +1,43 @@
-package dataStructure;
+package dataStructure.hashMap;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-class HashMap<K, V> {
-    private final int capacity;
-    private final Node<K, V>[] table;
+public class HashMap<K, V> {
+    private static final int DEFAULT_CAPACITY = 16;
+    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    private final float loadFactor;
+    private int capacity;
+    private int size;
+    private Node<K, V>[] table;
 
-    public HashMap(int capacity) {
-        this.capacity = capacity;
+    public HashMap(int initialCapacity, float loadFactor) {
+        if (initialCapacity < 0)
+            throw new IllegalArgumentException("Illegal initial capacity: " +
+                    initialCapacity);
+        if (loadFactor <= 0 || Float.isNaN(loadFactor))
+            throw new IllegalArgumentException("Illegal load factor: " +
+                    loadFactor);
+        this.loadFactor = loadFactor;
+        this.capacity = initialCapacity;
         //noinspection unchecked
-        this.table = (Node<K, V>[]) new Node[capacity];
+        this.table = (Node<K, V>[]) new Node[this.capacity];
+    }
+
+    public HashMap(int initialCapacity) {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    public HashMap() {
+        this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public boolean containsKey(K key) {
+        return get(key) != null;
     }
 
     public void put(K key, V value) {
@@ -20,6 +47,7 @@ class HashMap<K, V> {
 
         if (table[index] == null) {
             table[index] = node;
+            size++;
         } else {
             Node<K, V> temp = table[index];
             while (temp.next != null) {
@@ -33,7 +61,11 @@ class HashMap<K, V> {
                 temp.value = value;
             } else {
                 temp.next = node;
+                size++;
             }
+        }
+        if ((float) size / capacity >= loadFactor) {
+            resize();
         }
     }
 
@@ -59,12 +91,14 @@ class HashMap<K, V> {
             Node<K, V> temp = table[index];
             if (temp.key.equals(key)) {
                 table[index] = temp.next;
+                size--;
             } else {
                 Node<K, V> prev = temp;
                 temp = temp.next;
                 while (temp != null) {
                     if (temp.key.equals(key)) {
                         prev.next = temp.next;
+                        size--;
                         return;
                     }
                     prev = temp;
@@ -72,6 +106,31 @@ class HashMap<K, V> {
                 }
             }
         }
+    }
+
+    private void resize() {
+        int newCapacity = capacity * 2;
+        @SuppressWarnings("unchecked")
+        Node<K, V>[] newTable = (Node<K, V>[]) new Node[newCapacity];
+        for (int i = 0; i < capacity; i++) {
+            Node<K, V> curr = table[i];
+            while (curr != null) {
+                int index = Math.abs(curr.key.hashCode() % newCapacity);
+                Node<K, V> entry = new Node<>(curr.key, curr.value);
+                if (newTable[index] == null) {
+                    newTable[index] = entry;
+                } else {
+                    Node<K, V> tail = newTable[index];
+                    while (tail.next != null) {
+                        tail = tail.next;
+                    }
+                    tail.next = entry;
+                }
+                curr = curr.next;
+            }
+        }
+        table = newTable;
+        capacity = newCapacity;
     }
 
     public Iterator<K> keys() {
@@ -164,6 +223,6 @@ class HashMap<K, V> {
 
 
     private int hash(K key) {
-        return key.hashCode() % capacity;
+        return Math.abs(key.hashCode() % capacity);
     }
 }
