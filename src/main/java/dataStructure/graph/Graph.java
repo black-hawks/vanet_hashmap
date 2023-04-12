@@ -5,6 +5,15 @@ import dataStructure.hashMap.HashMap;
 public class Graph<K, V> {
     private final HashMap<K, HashMap<K, V>> adjacencyMap;
 
+    /**
+     * POGO weight : 
+     *  veh 
+     *  
+     * 
+     * v1 - <<v2, 20>, v3: 20>
+     * v2 -  <v1 , v2>
+     */
+
     public Graph() {
         adjacencyMap = new HashMap<>();
     }
