@@ -1,7 +1,9 @@
 package dataStructure.hashMap;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class HashMap<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
@@ -219,6 +221,15 @@ public class HashMap<K, V> {
             }
             return new Entry<>(currentNode.key, currentNode.value);
         }
+    }
+
+    public Set<Entry<K,V>> entrySet() {
+        Set<Entry<K,V>> entrySet = new HashSet<>();
+        Iterator<Entry<K,V>> iterator =  entries();
+        while (iterator.hasNext()) {
+            entrySet.add(iterator.next());
+        }
+        return entrySet;
     }
 
 
