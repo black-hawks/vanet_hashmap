@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphTest {
-    private Graph<String, Integer> graph;
+    private Graph<String> graph;
 
     @BeforeEach
     public void setUp() {

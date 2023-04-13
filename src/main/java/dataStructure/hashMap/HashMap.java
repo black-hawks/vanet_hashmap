@@ -1,5 +1,7 @@
 package dataStructure.hashMap;
 
+import simulation.Vehicle;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -232,6 +234,14 @@ public class HashMap<K, V> {
         return entrySet;
     }
 
+    public Set<K> keySet() {
+        Set<K> keySet = new HashSet<>();
+        Iterator<K> iterator =  keys();
+        while (iterator.hasNext()) {
+            keySet.add(iterator.next());
+        }
+        return keySet;
+    }
 
     private int hash(K key) {
         return Math.abs(key.hashCode() % capacity);
