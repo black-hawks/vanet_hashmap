@@ -1,29 +1,57 @@
 package dataStructure.graph;
 
+
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
+import java.util.*;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+/**
+
+ A class representing an undirected graph.
+
+ @param <K> the type of the vertices in the graph
+ */
 
 public class Graph<K> {
+    /**
+
+     The adjacency map of the graph.
+     */
     private final HashMap<K, HashMap<K, Integer>> adjacencyMap;
+    /**
+
+     The number of vertices in the graph.
+     */
     private int numberOfVertices;
 
+    /**
+
+     Constructs a new empty graph.
+     */
     public Graph() {
         adjacencyMap = new HashMap<>();
         numberOfVertices = 0;
     }
 
+    /**
+
+     Adds a vertex to the graph if it doesn't already exist.
+     @param vertex the vertex to be added
+     */
     public void addVertex(K vertex) {
         if (!adjacencyMap.containsKey(vertex)) {
             adjacencyMap.put(vertex, new HashMap<>());
             numberOfVertices++;
         }
     }
+    /**
 
+     Adds an edge between two vertices with the given weight.
+     If the vertices don't exist, they are added to the graph.
+     @param source the source vertex
+     @param destination the destination vertex
+     @param weight the weight of the edge
+     */
     public void addEdge(K source, K destination, Integer weight) {
         addVertex(source);
         addVertex(destination);
@@ -31,6 +59,11 @@ public class Graph<K> {
         adjacencyMap.get(destination).put(source,weight);
     }
 
+    /**
+
+     Removes a vertex from the graph, including all its edges.
+     @param vertex the vertex to be removed
+     */
     public void removeVertex(K vertex) {
         if (adjacencyMap.containsKey(vertex)) {
             adjacencyMap.remove(vertex);
@@ -39,6 +72,12 @@ public class Graph<K> {
         }
     }
 
+    /**
+
+     Removes an edge between two vertices, if it exists.
+     @param source the source vertex
+     @param destination the destination vertex
+     */
     public void removeEdge(K source, K destination) {
         if (adjacencyMap.containsKey(source) && adjacencyMap.get(source).containsKey(destination)) {
             adjacencyMap.get(source).remove(destination);
@@ -46,51 +85,105 @@ public class Graph<K> {
         }
     }
 
+    /**
+
+     Returns the adjacency map of the graph.
+     @return the adjacency map of the graph
+     */
     public HashMap<K, HashMap<K, Integer>> getAdjacencyMap() {
         return adjacencyMap;
     }
 
+    /**
+
+     Returns the number of vertices in the graph.
+     @return the number of vertices in the graph
+     */
     public int getNumberOfVertices(){
         return numberOfVertices;
     }
 
-    public HashMap<K, Integer> bfs( K source) {
-        HashMap<K, Integer> distances = new HashMap<K, Integer>();
+    /**
+
+     Computes and returns the shortest paths from the given source vertex to all other vertices in the graph,
+     using the Breadth-First Search (BFS) algorithm.
+
+     The distances are represented by Route objects containing the distance and the path of vertices.
+     @param source the source vertex
+     @return a HashMap containing the shortest routes from the source to each vertex
+     */
+    public HashMap<K, Route<K>> bfs(K source) {
+        HashMap<K, Route<K>> distances = new HashMap<>();
         Queue<K> queue = new LinkedList<>();
         Set<K> visited = new HashSet<>();
-        HashMap<K, K> parents = new HashMap<K, K>();
+        HashMap<K, K> parents = new HashMap<>();
 
         queue.offer(source);
         visited.add(source);
-        distances.put(source, 0);
+        distances.put(source, new Route(0, new ArrayList<>()));
         parents.put(source, null);
-
 
         while (!queue.isEmpty()) {
             K current = queue.poll();
-
             HashMap<K, Integer> innerMap = adjacencyMap.get(current);
+
             for (Entry<K, Integer> innerEntry : innerMap.entrySet()) {
                 K neighbor = innerEntry.getKey();
+
                 if (!visited.contains(neighbor)) {
                     queue.offer(neighbor);
                     visited.add(neighbor);
-                    distances.put(neighbor,( (int)distances.get(current)+ (int) innerEntry.getValue()));
+                    int distance = distances.get(current).getDistance() + innerEntry.getValue();
+                    List<K> path = new ArrayList<>(distances.get(current).getPath());
+                    path.add(current);
+                    distances.put(neighbor, new Route(distance, path));
                     parents.put(neighbor, current);
-                } else if (distances.get(neighbor) > distances.get(current) + innerEntry.getValue()) {
-                    distances.put(neighbor, distances.get(current) + innerEntry.getValue());
+                } else if (distances.get(neighbor).getDistance() > distances.get(current).getDistance() + innerEntry.getValue()) {
+                    int distance = distances.get(current).getDistance() + innerEntry.getValue();
+                    List<K> path = new ArrayList<>(distances.get(current).getPath());
+                    path.add(current);
+                    distances.put(neighbor, new Route(distance, path));
                     parents.put(neighbor, current);
-                }
-            }
-
-            // Set distances of unvisited vertices to null
-            for (Entry<K, java.lang.Integer> innerEntry : innerMap.entrySet()) {
-                if (!visited.contains(innerEntry.getKey())) {
-                    distances.put(innerEntry.getKey(), null);
                 }
             }
         }
 
+        // Add the path from the source to each node to the distances map
+        for (Entry<K, K> entry : parents.entrySet()) {
+            K node = entry.getKey();
+            List<K> path = new ArrayList<>();
+            while (node != null) {
+                path.add(0, node);
+                node = parents.get(node);
+            }
+            distances.get(entry.getKey()).getPath().addAll(path);
+        }
         return distances;
     }
+
+    /**
+
+     Returns the shortest path between a source vertex and a destination vertex in the graph.
+     @param source the source vertex
+     @param destination the destination vertex
+     @return the shortest path between the source and destination vertices as a Route object
+     */
+    public Route<K> shortestPath(K source, K destination) {
+        // Call bfs to get distances and parents maps
+        HashMap<K, Route<K>> distances = bfs(source);
+        return (getParents(distances, destination));
+    }
+
+    /**
+
+     Helper method to extract the shortest path from the distances map.
+     @param distances a HashMap containing the distances and paths for all vertices from the source vertex
+     @param destination the vertex to extract the path for
+     @return the shortest path for the specified vertex as a Route object
+     */
+    private Route<K> getParents(HashMap<K, Route<K>> distances, K destination) {
+       return distances.get(destination);
+    }
+
 }
+
