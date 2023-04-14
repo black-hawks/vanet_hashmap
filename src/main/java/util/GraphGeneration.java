@@ -2,7 +2,7 @@ package util;
 
 import dataStructure.graph.Graph;
 import dataStructure.hashMap.Entry;
-import dataStructure.hashMap.HashMap;
+import dataStructure.hashMap.LinkedListHashMap;
 import simulation.Vehicle;
 
 import java.util.*;
@@ -79,7 +79,7 @@ public class GraphGeneration {
 
         // delete vertices
         for (Vehicle source : randomKeys){
-            HashMap<Vehicle, Integer> innerMap = graph.getAdjacencyMap().get(source);
+            LinkedListHashMap<Vehicle, Integer> innerMap = graph.getAdjacencyMap().get(source);
             for (Entry<Vehicle, Integer> innerEntry : innerMap.entrySet()){
                 Vehicle destination = innerEntry.getKey();
                 graph.removeEdge(source, destination);

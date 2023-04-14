@@ -8,11 +8,10 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class HashMapTest {
-
+class TreeHashHashMapTest {
     @Test
     public void testPutAndGet() {
-        HashMap<String, Integer> map = new HashMap<>();
+        HashMap<String, Integer> map = new TreeHashHashMap<>();
 
         map.put("A", 1);
         map.put("B", 2);
@@ -26,7 +25,7 @@ public class HashMapTest {
 
     @Test
     public void testRemove() {
-        HashMap<String, Integer> map = new HashMap<>();
+        HashMap<String, Integer> map = new TreeHashHashMap<>();
 
         map.put("A", 1);
         map.put("B", 2);
@@ -41,7 +40,7 @@ public class HashMapTest {
 
     @Test
     public void testOverwrite() {
-        HashMap<String, Integer> map = new HashMap<>();
+        HashMap<String, Integer> map = new TreeHashHashMap<>();
 
         map.put("A", 1);
         map.put("A", 2);
@@ -52,7 +51,7 @@ public class HashMapTest {
 
     @Test
     public void testCollisions() {
-        HashMap<Integer, String> map = new HashMap<>();
+        HashMap<Integer, String> map = new TreeHashHashMap<>();
 
         map.put(1, "A");
         map.put(2, "B");
@@ -72,7 +71,7 @@ public class HashMapTest {
 
     @Test
     void testResize() {
-        HashMap<String, Integer> map = new HashMap<>(4);
+        HashMap<String, Integer> map = new TreeHashHashMap<>(4);
         map.put("apple", 1);
         map.put("banana", 2);
         map.put("cherry", 3);
@@ -88,7 +87,7 @@ public class HashMapTest {
 
     @Test
     public void testKeysIterator() {
-        HashMap<String, Integer> map = new HashMap<>();
+        LinkedListHashMap<String, Integer> map = new LinkedListHashMap<>();
         map.put("one", 1);
         map.put("two", 2);
         map.put("three", 3);
@@ -112,7 +111,7 @@ public class HashMapTest {
 
     @Test
     public void testValuesIterator() {
-        HashMap<String, Integer> map = new HashMap<>(3);
+        LinkedListHashMap<String, Integer> map = new LinkedListHashMap<>(3);
         map.put("one", 1);
         map.put("two", 2);
         map.put("three", 3);
@@ -136,7 +135,7 @@ public class HashMapTest {
 
     @Test
     public void testEntriesIterator() {
-        HashMap<String, Integer> map = new HashMap<>(3);
+        LinkedListHashMap<String, Integer> map = new LinkedListHashMap<>(3);
         map.put("one", 1);
         map.put("two", 2);
         map.put("three", 3);
@@ -163,4 +162,5 @@ public class HashMapTest {
             // Test passed
         }
     }
+
 }
