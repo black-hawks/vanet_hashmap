@@ -31,8 +31,7 @@ public class GraphGeneration {
      * @return The generated graph.
      */
     public static Graph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
-        List<Vehicle> vehicles = generateVehicleData(maxVertices);
-        List<VanetEntry> vanetData = generateVanetData(vehicles);
+        List<VanetEntry> vanetData = generateVanetData(maxVertices);
         return createGraph(vanetData);
     }
 
@@ -90,7 +89,8 @@ public class GraphGeneration {
         return vehicles;
     }
 
-    public static List<VanetEntry> generateVanetData(List<Vehicle> vehicles) {
+    public static List<VanetEntry> generateVanetData(int maxVertices) {
+        List<Vehicle> vehicles = generateVehicleData(maxVertices);
         List<VanetEntry> vanetData = new ArrayList<>();
         int threshold = (int) (vehicles.size() / 1.3);
         for (Vehicle sourceVehicle : vehicles) {
