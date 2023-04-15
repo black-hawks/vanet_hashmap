@@ -63,9 +63,11 @@ public class Util {
      * @param route the path to be printed
      */
     public static void printPath(Route<Vehicle> route){
-        System.out.print(route.getDistance() +" :");
+        System.out.print("Shortest Path  : ");
         for(Vehicle v : route.getPath()){
             System.out.print(v.getVehicleId() + ", ");
         }
+        System.out.println();
+        System.out.println("Shortest Path : " + route.getDistance());
     }
 }

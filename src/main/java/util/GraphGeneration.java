@@ -1,6 +1,7 @@
 package util;
 
 import dataStructure.graph.Graph;
+import dataStructure.graph.adjacencyListGraph.AdjacencyListGraph;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
@@ -18,6 +19,7 @@ public class GraphGeneration {
      */
     private static final int MAX_WEIGHT = 100;
 
+    private static final int MIN_WEIGHT = 10;
     private static final int MAX_SPEED = 140;
 
     /**
@@ -82,6 +84,7 @@ public class GraphGeneration {
         return graph;
     }
 
+
     public static List<Vehicle> generateVehicleData(int maxVertices) {
         List<Vehicle> vehicles = new ArrayList<>();
         for (int i = 0; i < maxVertices; i++) {
@@ -99,7 +102,7 @@ public class GraphGeneration {
                 int index = random.nextInt(vehicles.size() - 1);
                 if (index != i) {
                     Vehicle destinationVehicle = vehicles.get(index);
-                    int weight = random.nextInt(MAX_WEIGHT);
+                    int weight = random.nextInt((MAX_WEIGHT  - MIN_WEIGHT) + 1) + MIN_WEIGHT;
                     vanetData.add(new VanetEntry(sourceVehicle, destinationVehicle, weight));
                 }
             }

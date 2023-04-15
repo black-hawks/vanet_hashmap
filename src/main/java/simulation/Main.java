@@ -1,6 +1,7 @@
 package simulation;
 
 import dataStructure.graph.Graph;
+
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.graph.Route;
 import dataStructure.hashMap.HashMap;
@@ -8,8 +9,7 @@ import dataStructure.hashMap.TreeHashMap;
 import util.GraphGeneration;
 import util.Util;
 
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * The Main class simulates a scenario where vehicles in a range send messages to each other
@@ -24,7 +24,6 @@ public class Main {
      */
     public static void simulate(int numberOfVertices) {
 
-//        Graph<Vehicle> graph;
         Random random = new Random();
         int delCount = (int) (numberOfVertices / 1.25);
 
@@ -77,4 +76,5 @@ public class Main {
         simulate(5000);
 
     }
+
 }
