@@ -1,8 +1,10 @@
 package simulation;
 
+import dataStructure.graph.hashMapGraph.HashMapGraph;
+import dataStructure.graph.hashMapGraph.Route;
 import util.GraphGeneration;
 import java.util.*;
-import dataStructure.graph.*;
+
 import util.Util;
 
 /**
@@ -18,7 +20,7 @@ public class Main {
      */
     public static void simulate(int numberOfVertices){
 
-        Graph<Vehicle> graph;
+        HashMapGraph<Vehicle> graph;
         Random random = new Random();
         int delCount = (int)(numberOfVertices/1.25);
 
@@ -26,7 +28,7 @@ public class Main {
         System.out.println();
         System.out.println("Simulating for code when there are "+ numberOfVertices + " Vehicles in the range");
 
-        //Graph Generation
+        //HashMapGraph Generation
         graph = GraphGeneration.generateRandomWeightedGraph(numberOfVertices);
 
         //picking two random Vehicle
@@ -39,7 +41,7 @@ public class Main {
         Util.printPath(path);
 
 
-        //Deleting Vertices from the Graph
+        //Deleting Vertices from the HashMapGraph
         graph = GraphGeneration.deleteVertices(graph,delCount);
 
 

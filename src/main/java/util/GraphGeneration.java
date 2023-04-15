@@ -1,6 +1,6 @@
 package util;
 
-import dataStructure.graph.Graph;
+import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.LinkedListHashMap;
 import simulation.Vehicle;
@@ -30,7 +30,7 @@ public class GraphGeneration {
      * @param maxVertices number of vertices in the graph.
      * @return The generated graph.
      */
-    public static Graph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
+    public static HashMapGraph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
         List<VanetEntry> vanetData = generateVanetData(maxVertices);
         return createGraph(vanetData);
     }
@@ -42,7 +42,7 @@ public class GraphGeneration {
      * @param maxVertices The maximum number of vertices to delete.
      * @return The updated graph.
      */
-    public static Graph<Vehicle> deleteVertices(Graph<Vehicle> graph, int maxVertices) {
+    public static HashMapGraph<Vehicle> deleteVertices(HashMapGraph<Vehicle> graph, int maxVertices) {
 
         // create a hashset to store the randomly selected keys
         Set<Vehicle> randomKeys = new HashSet<Vehicle>();
@@ -70,8 +70,8 @@ public class GraphGeneration {
 
     }
 
-    public static Graph<Vehicle> createGraph(List<VanetEntry> vanetData) {
-        Graph<Vehicle> graph = new Graph<>();
+    public static HashMapGraph<Vehicle> createGraph(List<VanetEntry> vanetData) {
+        HashMapGraph<Vehicle> graph = new HashMapGraph<>();
         for (VanetEntry vanetEntry : vanetData) {
             graph.addEdge(
                     vanetEntry.getSourceVehicle(),
