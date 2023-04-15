@@ -1,7 +1,6 @@
 package experiments;
 
 import dataStructure.hashMap.hashFunction.*;
-import simulation.Vehicle;
 import util.GraphGeneration;
 
 import java.util.HashSet;

@@ -4,7 +4,7 @@ import dataStructure.graph.Graph;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
-import simulation.Vehicle;
+import experiments.Vehicle;
 
 import java.util.*;
 
