@@ -2,6 +2,7 @@ package dataStructure.graph.hashMapGraph;
 
 
 import dataStructure.graph.Graph;
+import dataStructure.graph.Route;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
@@ -175,7 +176,7 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
      * @param destination the vertex to extract the path for
      * @return the shortest path for the specified vertex as a Route object
      */
-    public Route<K> getParents(LinkedListHashMap<K, Route<K>> distances, K destination) {
+    private Route<K> getParents(LinkedListHashMap<K, Route<K>> distances, K destination) {
         return distances.get(destination);
     }
 

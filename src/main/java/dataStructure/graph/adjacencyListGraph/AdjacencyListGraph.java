@@ -1,15 +1,17 @@
 package dataStructure.graph.adjacencyListGraph;
 
 import dataStructure.graph.Graph;
+import dataStructure.graph.Route;
 
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class AdjacencyListGraph<V> implements Graph<V> {
 
     private List<V> vertices;
-    private List<LinkedList<Edge<V>>> adjacencyList;
+    private List<Node<V,Edge<V>>> adjacencyList;
 
     public AdjacencyListGraph() {
         vertices = new ArrayList<>();
@@ -19,7 +21,7 @@ public class AdjacencyListGraph<V> implements Graph<V> {
     @Override
     public void addVertex(V vertex) {
         vertices.add(vertex);
-        adjacencyList.add(new LinkedList<>());
+        adjacencyList.add(new Node<>(vertex, new LinkedList<>()));
     }
 
     /**
@@ -37,14 +39,15 @@ public class AdjacencyListGraph<V> implements Graph<V> {
             throw new IllegalArgumentException("Vertex not found");
         }
 
-        LinkedList<Edge<V>> sourceList = adjacencyList.get(sourceIndex);
-        LinkedList<Edge<V>> destinationList = adjacencyList.get(destinationIndex);
 
-        //add the edge to the source vertex
-        sourceList.add(new Edge<>(destination, weight));
+        Node<V, Edge<V>> sourceList = adjacencyList.get(sourceIndex);
+        Node<V, Edge<V>> destinationList = adjacencyList.get(destinationIndex);
 
-        //add the edge to the destination vertex
-        destinationList.add(new Edge<>(source, weight));
+        //add the edge to the source key
+        sourceList.getEdgeList().add(new Edge<>(destination, weight));
+
+        //add the edge to the destination key
+        destinationList.getEdgeList().add(new Edge<>(destination, weight));
 
     }
 
@@ -59,12 +62,12 @@ public class AdjacencyListGraph<V> implements Graph<V> {
             throw new IllegalArgumentException("Vertex not found");
         }
 
-        // Remove all edges containing the vertex
-        for (LinkedList<Edge<V>> list : adjacencyList) {
-            list = removeEdgeFromList(list);
+        // Remove all edges containing the key
+        for (Node<V, Edge<V>> node : adjacencyList) {
+            node = removeEdgeFromList(node);
         }
 
-        // Remove the vertex from the vertex list and the adjacency list
+        // Remove the key from the key list and the adjacency list
         vertices.remove(indexToRemove);
         adjacencyList.remove(indexToRemove);
     }
@@ -83,35 +86,96 @@ public class AdjacencyListGraph<V> implements Graph<V> {
             throw new IllegalArgumentException("Vertex not found");
         }
 
-        LinkedList<Edge<V>> sourceList = adjacencyList.get(sourceIndex);
-        LinkedList<Edge<V>> destinationList = adjacencyList.get(destinationIndex);
+        Node<V, Edge<V>> sourceNode = adjacencyList.get(sourceIndex);
+        Node<V, Edge<V>> destinationNode = adjacencyList.get(destinationIndex);
 
-        // Remove the edge from the source vertex
-        sourceList = removeEdgeFromList(destinationList);
+        // Remove the edge from the source key
+        sourceNode = removeEdgeFromList(sourceNode);
 
-        // Remove the edge from the destination vertex
-       destinationList = removeEdgeFromList(destinationList);
+        // Remove the edge from the destination key
+       destinationNode = removeEdgeFromList(destinationNode);
     }
 
-    private LinkedList<Edge<V>> removeEdgeFromList(LinkedList<Edge<V>> list){
-        for(Edge edge : list)
+    private Node<V, Edge<V>> removeEdgeFromList(Node<V, Edge<V>> node){
+        for(Edge edge : node.getEdgeList())
             if (edge.getVertex().equals(edge))
-                list.remove(edge);
-        return list;
+                node.getEdgeList().remove(edge);
+        return node;
     }
 
-    public void printAdjacencyList() {
-        for (int i = 0; i < adjacencyList.size(); i++) {
-            System.out.print(vertices.get(i) + " -> ");
-            LinkedList<Edge<V>> edgeList = adjacencyList.get(i);
-            for (int j = 0; j < edgeList.size(); j++) {
-                Edge<V> edge = edgeList.get(j);
-                System.out.print(edge.getVertex() + "(" + edge.getWeight() + ")");
-                if (j != edgeList.size() - 1) {
-                    System.out.print(" -> ");
+    public List<Node<V,Edge<V>>> getAdjacencyList(){
+        return adjacencyList;
+    }
+
+    /**
+     * @param source
+     * @param destination
+     * @return
+     */
+    @Override
+    public Route<V> shortestPath(V source, V destination) {
+        List<Pair<V, Route<V>>> distances = bfs(source);
+        if(distances == null){
+            System.out.println("Path not Found between the Source and Destination");
+        }
+        return (getParents(distances, destination));
+    }
+
+    private Route<V> getParents(List<Pair<V, Route<V>>> distances, V destination ) {
+        for(Pair<V, Route<V>> node : distances){
+            if(node.getKey().equals(distances)){
+                return node.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Performs a breadth-first search on the graph starting at the specified source vertex.
+     *
+     * @param source The source vertex to start the search from.
+     * @return A list of pairs representing the distance from the source vertex to each vertex in the graph, as well as the shortest path from the source to each vertex.
+     */
+    public List<Pair<V, Route<V>>> bfs(V source) {
+
+        List<Pair<V, Route<V>>> distances = new ArrayList<>();
+        List<V> visited = new ArrayList<>();
+        Queue<V> queue = new LinkedList<>();
+
+        for (V vertex : vertices) {
+            distances.add(new Pair(vertex, new Route<>(0, new ArrayList<>())));
+        }
+
+        queue.offer(source);
+        visited.add(source);
+
+        // Set the distance from the source vertex to itself as 0
+        distances.get(vertices.indexOf(source)).getValue().setDistance(0);
+
+        while (!queue.isEmpty()) {
+
+            V current = queue.poll();
+            int currentIndex = vertices.indexOf(current);
+
+            for (Edge<V> neighbor : adjacencyList.get(currentIndex).getEdgeList()) {
+
+                V neighborVertex = neighbor.getVertex();
+                if (!visited.contains(neighborVertex)) {
+                    queue.offer(neighborVertex);
+                    visited.add(neighborVertex);
+                }
+
+                int neighborIndex = vertices.indexOf(neighborVertex);
+                int newDistance = distances.get(currentIndex).getValue().getDistance() + neighbor.getWeight();
+
+                if (newDistance < distances.get(neighborIndex).getValue().getDistance()) {
+                    distances.get(neighborIndex).getValue().setDistance(newDistance);
+                    distances.get(neighborIndex).getValue().getPath().add(current);
                 }
             }
-            System.out.println();
         }
+
+        return distances;
     }
+
 }

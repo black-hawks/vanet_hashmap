@@ -1,7 +1,7 @@
 package util;
 
 import dataStructure.graph.hashMapGraph.HashMapGraph;
-import dataStructure.graph.hashMapGraph.Route;
+import dataStructure.graph.Route;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
@@ -33,9 +33,9 @@ public class Util {
     }
 
     /**
-     * Pick a random vertex from the graph
+     * Pick a random key from the graph
      * @param graph the graph to pick from
-     * @return a randomly picked vertex
+     * @return a randomly picked key
      */
     public static Vehicle pickRandomVehicle(HashMapGraph<Vehicle> graph){
         Object[] keys = graph.getAdjacencyMap().keys().toArray();
@@ -46,8 +46,8 @@ public class Util {
     }
 
     /**
-     * Print the shortest path distances and paths for each vertex in the graph
-     * @param distances the shortest path distances and paths for each vertex
+     * Print the shortest path distances and paths for each key in the graph
+     * @param distances the shortest path distances and paths for each key
      */
     public static void printShortestPath(LinkedListHashMap<Vehicle, Route<Vehicle>> distances){
         for(Entry<Vehicle, Route<Vehicle>> innerEntry : distances.entries()){

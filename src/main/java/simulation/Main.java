@@ -1,7 +1,7 @@
 package simulation;
 
 import dataStructure.graph.hashMapGraph.HashMapGraph;
-import dataStructure.graph.hashMapGraph.Route;
+import dataStructure.graph.Route;
 import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.TreeHashMap;
 import util.GraphGeneration;
