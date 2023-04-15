@@ -6,20 +6,27 @@ import java.util.List;
 public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    private static final boolean DEFAULT_RESIZABLE = true;
     private Node<K, V>[] table;
     private int size;
     private int capacity;
     private final float loadFactor;
+    private final boolean resizable;
 
     public TreeHashMap() {
-        this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
+        this(DEFAULT_CAPACITY, DEFAULT_RESIZABLE, DEFAULT_LOAD_FACTOR);
     }
 
     public TreeHashMap(int capacity) {
-        this(capacity, DEFAULT_LOAD_FACTOR);
+        this(capacity, DEFAULT_RESIZABLE, DEFAULT_LOAD_FACTOR);
     }
 
-    public TreeHashMap(int initialCapacity, float loadFactor) {
+
+    public TreeHashMap(int capacity, boolean resizable) {
+        this(capacity, resizable, DEFAULT_LOAD_FACTOR);
+    }
+
+    public TreeHashMap(int initialCapacity, boolean resizable, float loadFactor) {
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal initial capacity: " +
                     initialCapacity);
@@ -28,6 +35,7 @@ public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
                     loadFactor);
         this.loadFactor = loadFactor;
         this.capacity = initialCapacity;
+        this.resizable = resizable;
         //noinspection unchecked
         table = new Node[initialCapacity];
     }
@@ -40,7 +48,7 @@ public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
         } else {
             table[index] = insert(table[index], key, value);
         }
-        if ((float) size / capacity >= loadFactor) {
+        if (resizable && (float) size / capacity >= loadFactor) {
             resize();
         }
     }

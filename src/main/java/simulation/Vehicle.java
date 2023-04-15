@@ -54,8 +54,7 @@ public class Vehicle implements Comparable<Vehicle> {
     public int compareTo(Vehicle o) {
         if (this == o) {
             return 0;
-        } else {
-            return -1;
         }
+        return this.getVehicleId().compareTo(o.vehicleId);
     }
 }

@@ -2,7 +2,7 @@ package util;
 
 import simulation.Vehicle;
 
-class VanetEntry {
+public class VanetEntry {
     private final Vehicle sourceVehicle;
     private final Vehicle destinationVehicle;
     private final Integer weight;

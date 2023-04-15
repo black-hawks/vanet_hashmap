@@ -20,17 +20,12 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
      * The adjacency map of the graph.
      */
     private final HashMap<K, HashMap<K, Integer>> adjacencyMap;
-    /**
-     * The number of vertices in the graph.
-     */
-    private int numberOfVertices;
 
     /**
      * Constructs a new empty graph.
      */
     public HashMapGraph(HashMap<K, HashMap<K, Integer>> hashMap) {
         adjacencyMap = hashMap;
-        numberOfVertices = 0;
     }
 
     /**
@@ -41,7 +36,6 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     public void addVertex(K vertex) {
         if (!adjacencyMap.containsKey(vertex)) {
             adjacencyMap.put(vertex, createHashMap());
-            numberOfVertices++;
         }
     }
 
@@ -68,7 +62,6 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     public void removeVertex(K vertex) {
         if (adjacencyMap.containsKey(vertex)) {
             adjacencyMap.remove(vertex);
-            numberOfVertices--;
 
         }
     }
@@ -101,7 +94,7 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
      * @return the number of vertices in the graph
      */
     public int getNumberOfVertices() {
-        return numberOfVertices;
+        return adjacencyMap.size();
     }
 
     /**

@@ -3,7 +3,6 @@ package util;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
-import dataStructure.hashMap.TreeHashMap;
 import simulation.Vehicle;
 
 import java.util.*;
@@ -31,9 +30,10 @@ public class GraphGeneration {
      * @param maxVertices number of vertices in the graph.
      * @return The generated graph.
      */
-    public static HashMapGraph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
+    public static HashMapGraph<Vehicle> generateRandomWeightedGraph(
+            HashMap<Vehicle, HashMap<Vehicle, Integer>> hashMap, int maxVertices) {
         List<VanetEntry> vanetData = generateVanetData(maxVertices);
-        return createGraph(vanetData);
+        return createGraph(hashMap, vanetData);
     }
 
     /**
@@ -69,8 +69,8 @@ public class GraphGeneration {
 
     }
 
-    public static HashMapGraph<Vehicle> createGraph(List<VanetEntry> vanetData) {
-        HashMap<Vehicle, HashMap<Vehicle, Integer>> hashMap = new TreeHashMap<>();
+    public static HashMapGraph<Vehicle> createGraph(
+            HashMap<Vehicle, HashMap<Vehicle, Integer>> hashMap, List<VanetEntry> vanetData) {
         HashMapGraph<Vehicle> graph = new HashMapGraph<>(hashMap);
         for (VanetEntry vanetEntry : vanetData) {
             graph.addEdge(
