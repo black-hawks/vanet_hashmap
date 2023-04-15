@@ -1,7 +1,7 @@
 package util;
 
-import dataStructure.graph.Graph;
-import dataStructure.graph.Route;
+import dataStructure.graph.hashMapGraph.HashMapGraph;
+import dataStructure.graph.hashMapGraph.Route;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.LinkedListHashMap;
 import simulation.Vehicle;
@@ -18,8 +18,8 @@ public class Util {
      * Print the graph in the form of adjacency list
      * @param graph the graph to be printed
      */
-    public static void printGraph(Graph<Vehicle> graph){
-        System.out.println("Random Weighted Graph:");
+    public static void printGraph(HashMapGraph<Vehicle> graph){
+        System.out.println("Random Weighted HashMapGraph:");
         for (Entry<Vehicle, LinkedListHashMap<Vehicle, Integer>> entry : graph.getAdjacencyMap().entries()) {
             Vehicle key = entry.getKey();
             System.out.print(key.getVehicleId() + " : ");
@@ -36,7 +36,7 @@ public class Util {
      * @param graph the graph to pick from
      * @return a randomly picked vertex
      */
-    public static Vehicle pickRandomVehicle(Graph<Vehicle> graph){
+    public static Vehicle pickRandomVehicle(HashMapGraph<Vehicle> graph){
         Object[] keys = graph.getAdjacencyMap().keys().toArray();
         Random rand = new Random();
         Vehicle randomVehicle = (Vehicle) keys[rand.nextInt(keys.length)];

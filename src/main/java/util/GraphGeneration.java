@@ -1,6 +1,6 @@
 package util;
 
-import dataStructure.graph.Graph;
+import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.LinkedListHashMap;
 import simulation.Vehicle;
@@ -28,9 +28,9 @@ public class GraphGeneration {
      * @param maxVertices number of vertices in the graph.
      * @return The generated graph.
      */
-    public static Graph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
+    public static HashMapGraph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
 
-        Graph<Vehicle> graph;
+        HashMapGraph<Vehicle> graph;
 
         //create vertices
         graph = createVertices(maxVertices);
@@ -47,8 +47,8 @@ public class GraphGeneration {
      * @param maxVertices number of vertices in the graph.
      * @return The generated graph.
      */
-    public static Graph<Vehicle> createVertices(int maxVertices) {
-        Graph<Vehicle> graph = new Graph<>();
+    public static HashMapGraph<Vehicle> createVertices(int maxVertices) {
+        HashMapGraph<Vehicle> graph = new HashMapGraph<>();
         // Create vertices
         for (int i = 0; i < maxVertices; i++) {
             Vehicle V = new Vehicle("V" + (i + 1), random.nextInt(MAX_WEIGHT) + 1);
@@ -64,7 +64,7 @@ public class GraphGeneration {
      * @param maxVertices The maximum number of vertices to delete.
      * @return The updated graph.
      */
-    public static Graph<Vehicle> deleteVertices(Graph<Vehicle> graph, int maxVertices) {
+    public static HashMapGraph<Vehicle> deleteVertices(HashMapGraph<Vehicle> graph, int maxVertices) {
 
         // create a hashset to store the randomly selected keys
         Set<Vehicle> randomKeys = new HashSet<Vehicle>();
@@ -98,7 +98,7 @@ public class GraphGeneration {
      * @param graph The graph to create edges in.
      * @return The updated graph.
      */
-    public static Graph<Vehicle> createEdges(Graph<Vehicle> graph) {
+    public static HashMapGraph<Vehicle> createEdges(HashMapGraph<Vehicle> graph) {
 
         int numberOfVertices = graph.getNumberOfVertices();
         int threshold = (int) (numberOfVertices / 1.3);
