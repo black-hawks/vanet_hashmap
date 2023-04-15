@@ -271,7 +271,8 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
     /**
      * This method returns a List of all the entries present in the hash table.
      *
-     * @return a List of type Entry<K, V> containing all the entries present in the hash table.
+     * @return a List of type Generic class called Entry has K Key, V Value containing all the entries present
+     * in the hash table.
      */
     public List<Entry<K, V>> entries() {
         List<Entry<K, V>> entries = new ArrayList<>();

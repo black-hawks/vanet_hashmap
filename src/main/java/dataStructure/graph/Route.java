@@ -22,7 +22,6 @@ public class Route<K> {
      * Constructs a new Route with the given distance and path.
      *
      * @param distance the distance of the route
-     * @param path the path taken for the route
      */
     public void setDistance(int distance) {
         this.distance = distance;
@@ -31,7 +30,7 @@ public class Route<K> {
     /**
      * Sets the distance of the route.
      *
-     * @param distance the new distance of the route
+     * @param path sets the path
      */
     public void setPath(List<K> path) {
         this.path = path;
