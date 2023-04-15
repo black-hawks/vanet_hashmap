@@ -2,7 +2,7 @@ package dataStructure.graph;
 
 
 import dataStructure.hashMap.Entry;
-import dataStructure.hashMap.HashMap;
+import dataStructure.hashMap.LinkedListHashMap;
 import java.util.*;
 
 /**
@@ -17,7 +17,7 @@ public class Graph<K> {
 
      The adjacency map of the graph.
      */
-    private final HashMap<K, HashMap<K, Integer>> adjacencyMap;
+    private final LinkedListHashMap<K, LinkedListHashMap<K, Integer>> adjacencyMap;
     /**
 
      The number of vertices in the graph.
@@ -29,7 +29,7 @@ public class Graph<K> {
      Constructs a new empty graph.
      */
     public Graph() {
-        adjacencyMap = new HashMap<>();
+        adjacencyMap = new LinkedListHashMap<>();
         numberOfVertices = 0;
     }
 
@@ -40,7 +40,7 @@ public class Graph<K> {
      */
     public void addVertex(K vertex) {
         if (!adjacencyMap.containsKey(vertex)) {
-            adjacencyMap.put(vertex, new HashMap<>());
+            adjacencyMap.put(vertex, new LinkedListHashMap<>());
             numberOfVertices++;
         }
     }
@@ -90,7 +90,7 @@ public class Graph<K> {
      Returns the adjacency map of the graph.
      @return the adjacency map of the graph
      */
-    public HashMap<K, HashMap<K, Integer>> getAdjacencyMap() {
+    public LinkedListHashMap<K, LinkedListHashMap<K, Integer>> getAdjacencyMap() {
         return adjacencyMap;
     }
 
@@ -112,22 +112,22 @@ public class Graph<K> {
      @param source the source vertex
      @return a HashMap containing the shortest routes from the source to each vertex
      */
-    public HashMap<K, Route<K>> bfs(K source) {
-        HashMap<K, Route<K>> distances = new HashMap<>();
+    public LinkedListHashMap<K, Route<K>> bfs(K source) {
+        LinkedListHashMap<K, Route<K>> distances = new LinkedListHashMap<>();
         Queue<K> queue = new LinkedList<>();
         Set<K> visited = new HashSet<>();
-        HashMap<K, K> parents = new HashMap<>();
+        LinkedListHashMap<K, K> parents = new LinkedListHashMap<>();
 
         queue.offer(source);
         visited.add(source);
-        distances.put(source, new Route(0, new ArrayList<>()));
+        distances.put(source, new Route<>(0, new ArrayList<>()));
         parents.put(source, null);
 
         while (!queue.isEmpty()) {
             K current = queue.poll();
-            HashMap<K, Integer> innerMap = adjacencyMap.get(current);
+            LinkedListHashMap<K, Integer> innerMap = adjacencyMap.get(current);
 
-            for (Entry<K, Integer> innerEntry : innerMap.entrySet()) {
+            for (Entry<K, Integer> innerEntry : innerMap.entries()) {
                 K neighbor = innerEntry.getKey();
 
                 if (!visited.contains(neighbor)) {
@@ -136,20 +136,20 @@ public class Graph<K> {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route(distance, path));
+                    distances.put(neighbor, new Route<>(distance, path));
                     parents.put(neighbor, current);
                 } else if (distances.get(neighbor).getDistance() > distances.get(current).getDistance() + innerEntry.getValue()) {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route(distance, path));
+                    distances.put(neighbor, new Route<>(distance, path));
                     parents.put(neighbor, current);
                 }
             }
         }
 
         // Add the path from the source to each node to the distances map
-        for (Entry<K, K> entry : parents.entrySet()) {
+        for (Entry<K, K> entry : parents.entries()) {
             K node = entry.getKey();
             List<K> path = new ArrayList<>();
             while (node != null) {
@@ -170,7 +170,7 @@ public class Graph<K> {
      */
     public Route<K> shortestPath(K source, K destination) {
         // Call bfs to get distances and parents maps
-        HashMap<K, Route<K>> distances = bfs(source);
+        LinkedListHashMap<K, Route<K>> distances = bfs(source);
         return (getParents(distances, destination));
     }
 
@@ -181,7 +181,7 @@ public class Graph<K> {
      @param destination the vertex to extract the path for
      @return the shortest path for the specified vertex as a Route object
      */
-    private Route<K> getParents(HashMap<K, Route<K>> distances, K destination) {
+    private Route<K> getParents(LinkedListHashMap<K, Route<K>> distances, K destination) {
        return distances.get(destination);
     }
 

@@ -2,35 +2,35 @@ package util;
 
 import dataStructure.graph.Graph;
 import dataStructure.hashMap.Entry;
-import dataStructure.hashMap.HashMap;
+import dataStructure.hashMap.LinkedListHashMap;
 import simulation.Vehicle;
 
 import java.util.*;
 
 /**
-
- A utility class for generating random weighted graphs.
+ * A utility class for generating random weighted graphs.
  */
 public class GraphGeneration {
 
     /**
-     The maximum weight for edges in the graph.
+     * The maximum weight for edges in the graph.
      */
     private static final int MAX_WEIGHT = 100;
 
     /**
-     A random object used for generating random values.
+     * A random object used for generating random values.
      */
     private static Random random = new Random();
 
     /**
-     Generates a random weighted graph with a given maximum number of vertices.
-     @param maxVertices number of vertices in the graph.
-     @return The generated graph.
+     * Generates a random weighted graph with a given maximum number of vertices.
+     *
+     * @param maxVertices number of vertices in the graph.
+     * @return The generated graph.
      */
     public static Graph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
 
-        Graph<Vehicle > graph;
+        Graph<Vehicle> graph;
 
         //create vertices
         graph = createVertices(maxVertices);
@@ -42,11 +42,12 @@ public class GraphGeneration {
     }
 
     /**
-     Creates a graph with a given maximum number of vertices.
-     @param maxVertices number of vertices in the graph.
-     @return The generated graph.
+     * Creates a graph with a given maximum number of vertices.
+     *
+     * @param maxVertices number of vertices in the graph.
+     * @return The generated graph.
      */
-    public static Graph<Vehicle> createVertices(int maxVertices){
+    public static Graph<Vehicle> createVertices(int maxVertices) {
         Graph<Vehicle> graph = new Graph<>();
         // Create vertices
         for (int i = 0; i < maxVertices; i++) {
@@ -57,17 +58,18 @@ public class GraphGeneration {
     }
 
     /**
-     Deletes a given number of vertices from a graph.
-     @param graph The graph to delete vertices from.
-     @param maxVertices The maximum number of vertices to delete.
-     @return The updated graph.
+     * Deletes a given number of vertices from a graph.
+     *
+     * @param graph       The graph to delete vertices from.
+     * @param maxVertices The maximum number of vertices to delete.
+     * @return The updated graph.
      */
-    public static Graph<Vehicle> deleteVertices(Graph<Vehicle> graph, int maxVertices){
+    public static Graph<Vehicle> deleteVertices(Graph<Vehicle> graph, int maxVertices) {
 
         // create a hashset to store the randomly selected keys
         Set<Vehicle> randomKeys = new HashSet<Vehicle>();
 
-        Object[] keys = graph.getAdjacencyMap().keySet().toArray();
+        Object[] keys = graph.getAdjacencyMap().keys().toArray();
 
         // generate random unique keys until the hashset contains 10 keys
         while (randomKeys.size() < maxVertices) {
@@ -78,9 +80,9 @@ public class GraphGeneration {
         }
 
         // delete vertices
-        for (Vehicle source : randomKeys){
-            HashMap<Vehicle, Integer> innerMap = graph.getAdjacencyMap().get(source);
-            for (Entry<Vehicle, Integer> innerEntry : innerMap.entrySet()){
+        for (Vehicle source : randomKeys) {
+            LinkedListHashMap<Vehicle, Integer> innerMap = graph.getAdjacencyMap().get(source);
+            for (Entry<Vehicle, Integer> innerEntry : innerMap.entries()) {
                 Vehicle destination = innerEntry.getKey();
                 graph.removeEdge(source, destination);
             }
@@ -91,21 +93,18 @@ public class GraphGeneration {
     }
 
     /**
-
-     Creates edges in a graph with a given threshold for the number of edges per vertex.
-     @param graph The graph to create edges in.
-     @return The updated graph.
+     * Creates edges in a graph with a given threshold for the number of edges per vertex.
+     *
+     * @param graph The graph to create edges in.
+     * @return The updated graph.
      */
     public static Graph<Vehicle> createEdges(Graph<Vehicle> graph) {
 
         int numberOfVertices = graph.getNumberOfVertices();
-        int threshold = (int)( numberOfVertices/1.3);
+        int threshold = (int) (numberOfVertices / 1.3);
 
-        Set<Vehicle> vertices = graph.getAdjacencyMap().keySet();
-        List<Vehicle> vehicleList = new ArrayList<>(vertices);
-
-        for (Iterator<Vehicle> it = graph.getAdjacencyMap().keys(); it.hasNext(); ) {
-            Vehicle source = it.next();
+        List<Vehicle> vehicleList = graph.getAdjacencyMap().keys();
+        for (Vehicle source : vehicleList) {
             Collections.shuffle(vehicleList);
 
             for (int i = 0; i < threshold; i++) {

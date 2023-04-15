@@ -3,7 +3,7 @@ package util;
 import dataStructure.graph.Graph;
 import dataStructure.graph.Route;
 import dataStructure.hashMap.Entry;
-import dataStructure.hashMap.HashMap;
+import dataStructure.hashMap.LinkedListHashMap;
 import simulation.Vehicle;
 
 import java.util.Random;
@@ -20,11 +20,11 @@ public class Util {
      */
     public static void printGraph(Graph<Vehicle> graph){
         System.out.println("Random Weighted Graph:");
-        for (Entry<Vehicle, HashMap<Vehicle, Integer>> entry : graph.getAdjacencyMap().entrySet()) {
+        for (Entry<Vehicle, LinkedListHashMap<Vehicle, Integer>> entry : graph.getAdjacencyMap().entries()) {
             Vehicle key = entry.getKey();
             System.out.print(key.getVehicleId() + " : ");
-            HashMap<Vehicle, Integer> innerMap = entry.getValue();
-            for(Entry<Vehicle, Integer> innerEntry : innerMap.entrySet()){
+            LinkedListHashMap<Vehicle, Integer> innerMap = entry.getValue();
+            for(Entry<Vehicle, Integer> innerEntry : innerMap.entries()){
                 System.out.print( "< " + innerEntry.getKey().getVehicleId() + " , "+ innerEntry.getValue() + " > ");
             }
             System.out.println();
@@ -37,7 +37,7 @@ public class Util {
      * @return a randomly picked vertex
      */
     public static Vehicle pickRandomVehicle(Graph<Vehicle> graph){
-        Object[] keys = graph.getAdjacencyMap().keySet().toArray();
+        Object[] keys = graph.getAdjacencyMap().keys().toArray();
         Random rand = new Random();
         Vehicle randomVehicle = (Vehicle) keys[rand.nextInt(keys.length)];
 
@@ -48,8 +48,8 @@ public class Util {
      * Print the shortest path distances and paths for each vertex in the graph
      * @param distances the shortest path distances and paths for each vertex
      */
-    public static void printShortestPath(HashMap<Vehicle, Route<Vehicle>> distances){
-        for(Entry<Vehicle, Route<Vehicle>> innerEntry : distances.entrySet()){
+    public static void printShortestPath(LinkedListHashMap<Vehicle, Route<Vehicle>> distances){
+        for(Entry<Vehicle, Route<Vehicle>> innerEntry : distances.entries()){
             System.out.print( innerEntry.getKey().getVehicleId() + " , ");
             printPath(innerEntry.getValue());
             System.out.println();
