@@ -14,13 +14,13 @@ public class Hashing {
         for (int vertex : vertices) {
             List<Vehicle> vehicles = GraphGeneration.generateVehicleData(vertex);
             double collisionRate = getCollisionRate(new Modulus<>(), vehicles);
-            System.out.println("Modulus Hash function has " + collisionRate + " rate for " + vehicles.size() + " vehicles");
+            System.out.println("Modulus Hash function has " + collisionRate + " collision rate for " + vehicles.size() + " vehicles");
 
             collisionRate = getCollisionRate(new Multiplicative<>(), vehicles);
-            System.out.println("Multiplicative Hash function has " + collisionRate + " rate for " + vehicles.size() + " vehicles");
+            System.out.println("Multiplicative Hash function has " + collisionRate + " collision rate for " + vehicles.size() + " vehicles");
 
             collisionRate = getCollisionRate(new XOR<>(), vehicles);
-            System.out.println("XOR Hash function has " + collisionRate + " rate for " + vehicles.size() + " vehicles");
+            System.out.println("XOR Hash function has " + collisionRate + " collision rate for " + vehicles.size() + " vehicles");
 
             System.out.println();
         }
