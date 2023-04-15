@@ -7,10 +7,18 @@ import dataStructure.hashMap.LinkedListHashMap;
 import dataStructure.hashMap.TreeHashMap;
 import util.GraphGeneration;
 import util.VanetEntry;
-
 import java.util.List;
 
+/**
+ * This class performs experiments on adding edges to graph data structures with non-resizable hash maps.
+ *
+ */
 public class AddEdgeNonResizable {
+    /**
+     * The main method runs experiments on adding edges to graph data structures with non-resizable hash maps.
+     *
+     * @param args The command-line arguments passed to the program.
+     */
     public static void main(String[] args) {
         int[] vertices = {10, 50, 100, 500, 1000, 2500, 5000};
         for (int i = 0; i < vertices.length; i++) {

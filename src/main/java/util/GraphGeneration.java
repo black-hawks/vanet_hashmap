@@ -5,7 +5,6 @@ import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
 import experiments.Vehicle;
-
 import java.util.*;
 
 /**
@@ -18,7 +17,14 @@ public class GraphGeneration {
      */
     private static final int MAX_WEIGHT = 100;
 
+    /**
+     * The minimum weight for edges in the graph.
+     */
     private static final int MIN_WEIGHT = 10;
+
+    /**
+     * The maximum speed of the vehicles.
+     */
     private static final int MAX_SPEED = 140;
 
     /**
@@ -29,7 +35,8 @@ public class GraphGeneration {
     /**
      * Generates a random weighted graph with a given maximum number of vertices.
      *
-     * @param maxVertices number of vertices in the graph.
+     * @param graph       The graph to generate.
+     * @param maxVertices The maximum number of vertices in the graph.
      * @return The generated graph.
      */
     public static Graph<Vehicle> generateRandomWeightedGraph(Graph<Vehicle> graph, int maxVertices) {
@@ -51,7 +58,7 @@ public class GraphGeneration {
 
         Object[] keys = graph.getVertices().toArray();
 
-        // generate random unique keys until the hashset contains 10 keys
+        // generate random unique keys until the hashset contains maxVertices keys
         while (randomKeys.size() < maxVertices) {
             Vehicle v = (Vehicle) keys[random.nextInt(graph.getNumberOfVertices())];
             randomKeys.add(v);
@@ -72,6 +79,13 @@ public class GraphGeneration {
 
     }
 
+    /**
+     * Creates a graph from the given vanet data.
+     *
+     * @param graph    The graph to add edges to.
+     * @param vanetData The vanet data to add to the graph.
+     * @return The updated graph.
+     */
     public static Graph<Vehicle> createGraph(
             Graph<Vehicle> graph, List<VanetEntry> vanetData) {
         for (VanetEntry vanetEntry : vanetData) {
@@ -83,7 +97,12 @@ public class GraphGeneration {
         return graph;
     }
 
-
+    /**
+     * Generates a list of vehicles with randomly generated speeds.
+     *
+     * @param maxVertices The maximum number of vehicles to generate.
+     * @return The generated list of vehicles.
+     */
     public static List<Vehicle> generateVehicleData(int maxVertices) {
         List<Vehicle> vehicles = new ArrayList<>();
         for (int i = 0; i < maxVertices; i++) {
@@ -91,16 +110,33 @@ public class GraphGeneration {
         }
         return vehicles;
     }
+    /**
+
+     * Generates a list of {@link VanetEntry} objects representing connections between vehicles in a VANET network
+     * based on the number of maximum vertices provided.
+     * @param maxVertices the maximum number of vertices (vehicles) to generate data for
+     * @return a list of {@link VanetEntry} objects representing connections between vehicles
+     */
 
     public static List<VanetEntry> generateVanetData(int maxVertices) {
         List<Vehicle> vehicles = generateVehicleData(maxVertices);
         return generateEdges(vehicles);
     }
-
+    /**
+     * Generates a list of {@link VanetEntry} objects representing connections between vehicles in a VANET network
+     * based on the list of vehicles provided.
+     * @param vehicles a list of vehicles to generate connections for
+     * @return a list of {@link VanetEntry} objects representing connections between vehicles
+     */
     public static List<VanetEntry> generateVanetData(List<Vehicle> vehicles) {
         return generateEdges(vehicles);
     }
-
+    /**
+     * Generates a list of {@link VanetEntry} objects representing connections between vehicles in a VANET network
+     * based on the list of vehicles provided, using a random algorithm to determine the connections.
+     * @param vehicles a list of vehicles to generate connections for
+     * @return a list of {@link VanetEntry} objects representing connections between vehicles
+     */
     public static List<VanetEntry> generateEdges(List<Vehicle> vehicles) {
         List<VanetEntry> vanetData = new ArrayList<>();
         int threshold = (int) (vehicles.size() / 1.3);
