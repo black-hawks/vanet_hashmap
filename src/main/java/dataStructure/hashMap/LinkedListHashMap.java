@@ -23,7 +23,7 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
         this.loadFactor = loadFactor;
         this.capacity = initialCapacity;
         //noinspection unchecked
-        this.table = (Node<K, V>[]) new Node[this.capacity];
+        this.table = new Node[this.capacity];
     }
 
     public LinkedListHashMap(int initialCapacity) {
@@ -113,7 +113,7 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
     private void resize() {
         int newCapacity = capacity * 2;
         @SuppressWarnings("unchecked")
-        Node<K, V>[] newTable = (Node<K, V>[]) new Node[newCapacity];
+        Node<K, V>[] newTable = new Node[newCapacity];
         for (int i = 0; i < capacity; i++) {
             Node<K, V> curr = table[i];
             while (curr != null) {

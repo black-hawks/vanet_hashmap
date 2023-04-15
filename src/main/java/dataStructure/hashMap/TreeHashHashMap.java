@@ -2,16 +2,31 @@ package dataStructure.hashMap;
 
 public class TreeHashHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
-    private final Node<K, V>[] table;
+    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    private Node<K, V>[] table;
     private int size;
+    private int capacity;
+    private final float loadFactor;
 
     public TreeHashHashMap() {
-        this(DEFAULT_CAPACITY);
+        this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
     }
 
     public TreeHashHashMap(int capacity) {
+        this(capacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    public TreeHashHashMap(int initialCapacity, float loadFactor) {
+        if (initialCapacity < 0)
+            throw new IllegalArgumentException("Illegal initial capacity: " +
+                    initialCapacity);
+        if (loadFactor <= 0 || Float.isNaN(loadFactor))
+            throw new IllegalArgumentException("Illegal load factor: " +
+                    loadFactor);
+        this.loadFactor = loadFactor;
+        this.capacity = initialCapacity;
         //noinspection unchecked
-        table = (Node<K, V>[]) new Node[capacity];
+        table = new Node[initialCapacity];
     }
 
     public void put(K key, V value) {
@@ -21,6 +36,9 @@ public class TreeHashHashMap<K extends Comparable<K>, V> implements HashMap<K, V
             size++;
         } else {
             table[index] = insert(table[index], key, value);
+        }
+        if ((float) size / capacity >= loadFactor) {
+            resize();
         }
     }
 
@@ -39,9 +57,8 @@ public class TreeHashHashMap<K extends Comparable<K>, V> implements HashMap<K, V
         return size;
     }
 
-    @Override
     public boolean containsKey(K key) {
-        return false;
+        return get(key) != null;
     }
 
     private int hash(K key) {
@@ -105,6 +122,28 @@ public class TreeHashHashMap<K extends Comparable<K>, V> implements HashMap<K, V
             }
         }
         return node;
+    }
+
+    public void resize() {
+        int newCapacity = capacity * 2;
+        Node<K, V>[] oldTable = table;
+        //noinspection unchecked
+        table = new Node[newCapacity];
+        capacity = newCapacity;
+        size = 0;
+        for (Node<K, V> node : oldTable) {
+            if (node != null) {
+                resizeHelper(node);
+            }
+        }
+    }
+
+    private void resizeHelper(Node<K, V> node) {
+        if (node != null) {
+            put(node.key, node.value);
+            resizeHelper(node.left);
+            resizeHelper(node.right);
+        }
     }
 
     private static class Node<K, V> {
