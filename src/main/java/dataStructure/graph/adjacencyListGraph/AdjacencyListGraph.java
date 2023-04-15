@@ -18,6 +18,7 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         adjacencyList = new ArrayList<>();
     }
 
+
     @Override
     public void addVertex(V vertex) {
         vertices.add(vertex);
@@ -119,6 +120,22 @@ public class AdjacencyListGraph<V> implements Graph<V> {
             System.out.println("Path not Found between the Source and Destination");
         }
         return (getParents(distances, destination));
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public List<V> getVertices() {
+        return vertices;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public int getNumberOfVertices() {
+       return vertices.size();
     }
 
     private Route<V> getParents(List<Pair<V, Route<V>>> distances, V destination ) {

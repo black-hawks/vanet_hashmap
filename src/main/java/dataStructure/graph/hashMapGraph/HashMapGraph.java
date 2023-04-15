@@ -170,6 +170,14 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     }
 
     /**
+     * @return
+     */
+    @Override
+    public List<K> getVertices() {
+        return getAdjacencyMap().keys();
+    }
+
+    /**
      * Helper method to extract the shortest path from the distances map.
      *
      * @param distances   a HashMap containing the distances and paths for all vertices from the source vertex
