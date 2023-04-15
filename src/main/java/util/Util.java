@@ -6,7 +6,7 @@ import dataStructure.graph.Route;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
-import simulation.Vehicle;
+import experiments.Vehicle;
 
 import java.util.Random;
 

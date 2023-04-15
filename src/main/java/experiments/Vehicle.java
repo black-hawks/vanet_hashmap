@@ -1,4 +1,4 @@
-package simulation;
+package experiments;
 
 /**
  * The Vehicle class represents a vehicle that can send and receive messages in the simulation.

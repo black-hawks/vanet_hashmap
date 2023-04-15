@@ -1,11 +1,11 @@
-package experiments.graph;
+package experiments;
 
 import dataStructure.graph.Graph;
+import dataStructure.graph.adjacencyListGraph.AdjacencyListGraph;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
 import dataStructure.hashMap.TreeHashMap;
-import simulation.Vehicle;
 import util.GraphGeneration;
 import util.VanetEntry;
 
@@ -19,16 +19,21 @@ public class AddEdge {
             System.out.println("To store " + vertices[i] + " vehicles and " + vanetData.size() + " edges:");
 
             long start = System.currentTimeMillis();
-            HashMap<Vehicle, HashMap<Vehicle, Integer>> linkedListHashMap = new LinkedListHashMap<>(16, false);
+            HashMap<Vehicle, HashMap<Vehicle, Integer>> linkedListHashMap = new LinkedListHashMap<>();
             Graph<Vehicle> linkedListHashMapGraph = new HashMapGraph<>(linkedListHashMap);
-            linkedListHashMapGraph = GraphGeneration.createGraph(linkedListHashMapGraph, vanetData);
+            GraphGeneration.createGraph(linkedListHashMapGraph, vanetData);
             System.out.println("HashMap Graph based on Linked List took: " + (System.currentTimeMillis() - start) + "ms");
 
             start = System.currentTimeMillis();
-            HashMap<Vehicle, HashMap<Vehicle, Integer>> treeHashMap = new TreeHashMap<>(16, false);
-            Graph<Vehicle> treeHashMapGraph = new HashMapGraph<>(linkedListHashMap);
-            treeHashMapGraph = GraphGeneration.createGraph(treeHashMapGraph, vanetData);
+            HashMap<Vehicle, HashMap<Vehicle, Integer>> treeHashMap = new TreeHashMap<>();
+            Graph<Vehicle> treeHashMapGraph = new HashMapGraph<>(treeHashMap);
+            GraphGeneration.createGraph(treeHashMapGraph, vanetData);
             System.out.println("HashMap Graph based on Tree took: " + (System.currentTimeMillis() - start) + "ms");
+
+            start = System.currentTimeMillis();
+            Graph<Vehicle> adjacencyListGraph = new AdjacencyListGraph<>();
+            GraphGeneration.createGraph(adjacencyListGraph, vanetData);
+            System.out.println("Adjacency List Graph took: " + (System.currentTimeMillis() - start) + "ms");
 
             System.out.println();
         }

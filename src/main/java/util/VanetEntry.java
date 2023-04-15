@@ -1,6 +1,6 @@
 package util;
 
-import simulation.Vehicle;
+import experiments.Vehicle;
 
 public class VanetEntry {
     private final Vehicle sourceVehicle;
