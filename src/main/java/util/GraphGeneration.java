@@ -17,10 +17,12 @@ public class GraphGeneration {
      */
     private static final int MAX_WEIGHT = 100;
 
+    private static final int MAX_SPEED = 140;
+
     /**
      * A random object used for generating random values.
      */
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     /**
      * Generates a random weighted graph with a given maximum number of vertices.
@@ -29,32 +31,8 @@ public class GraphGeneration {
      * @return The generated graph.
      */
     public static Graph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
-
-        Graph<Vehicle> graph;
-
-        //create vertices
-        graph = createVertices(maxVertices);
-
-        //creating the edges
-        graph = createEdges(graph);
-
-        return graph;
-    }
-
-    /**
-     * Creates a graph with a given maximum number of vertices.
-     *
-     * @param maxVertices number of vertices in the graph.
-     * @return The generated graph.
-     */
-    public static Graph<Vehicle> createVertices(int maxVertices) {
-        Graph<Vehicle> graph = new Graph<>();
-        // Create vertices
-        for (int i = 0; i < maxVertices; i++) {
-            Vehicle V = new Vehicle("V" + (i + 1), random.nextInt(MAX_WEIGHT) + 1);
-            graph.addVertex(V);
-        }
-        return graph;
+        List<VanetEntry> vanetData = generateVanetData(maxVertices);
+        return createGraph(vanetData);
     }
 
     /**
@@ -92,30 +70,40 @@ public class GraphGeneration {
 
     }
 
-    /**
-     * Creates edges in a graph with a given threshold for the number of edges per vertex.
-     *
-     * @param graph The graph to create edges in.
-     * @return The updated graph.
-     */
-    public static Graph<Vehicle> createEdges(Graph<Vehicle> graph) {
-
-        int numberOfVertices = graph.getNumberOfVertices();
-        int threshold = (int) (numberOfVertices / 1.3);
-
-        List<Vehicle> vehicleList = graph.getAdjacencyMap().keys();
-        for (Vehicle source : vehicleList) {
-            Collections.shuffle(vehicleList);
-
-            for (int i = 0; i < threshold; i++) {
-                int index = i + random.nextInt(vehicleList.size() - i); // pick a random index from the remaining candidates
-                Vehicle destination = vehicleList.get(index);
-                int weight = random.nextInt(MAX_WEIGHT) + 1;
-                graph.addEdge(source, destination, weight);
-            }
-
+    public static Graph<Vehicle> createGraph(List<VanetEntry> vanetData) {
+        Graph<Vehicle> graph = new Graph<>();
+        for (VanetEntry vanetEntry : vanetData) {
+            graph.addEdge(
+                    vanetEntry.getSourceVehicle(),
+                    vanetEntry.getDestinationVehicle(),
+                    vanetEntry.getWeight());
         }
         return graph;
     }
 
+    public static List<Vehicle> generateVehicleData(int maxVertices) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        for (int i = 0; i < maxVertices; i++) {
+            vehicles.add(new Vehicle("V" + (i + 1), random.nextInt(MAX_SPEED)));
+        }
+        return vehicles;
+    }
+
+    public static List<VanetEntry> generateVanetData(int maxVertices) {
+        List<Vehicle> vehicles = generateVehicleData(maxVertices);
+        List<VanetEntry> vanetData = new ArrayList<>();
+        int threshold = (int) (vehicles.size() / 1.3);
+        for (Vehicle sourceVehicle : vehicles) {
+            for (int i = 0; i < threshold; i++) {
+                int index = random.nextInt(vehicles.size() - 1);
+                if (index != i) {
+                    Vehicle destinationVehicle = vehicles.get(index);
+                    int weight = random.nextInt(MAX_WEIGHT);
+                    vanetData.add(new VanetEntry(sourceVehicle, destinationVehicle, weight));
+                }
+            }
+
+        }
+        return vanetData;
+    }
 }

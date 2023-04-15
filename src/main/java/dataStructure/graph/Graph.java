@@ -20,17 +20,12 @@ public class Graph<K> {
     private final LinkedListHashMap<K, LinkedListHashMap<K, Integer>> adjacencyMap;
     /**
 
-     The number of vertices in the graph.
-     */
-    private int numberOfVertices;
-
     /**
 
      Constructs a new empty graph.
      */
     public Graph() {
         adjacencyMap = new LinkedListHashMap<>();
-        numberOfVertices = 0;
     }
 
     /**
@@ -41,7 +36,6 @@ public class Graph<K> {
     public void addVertex(K vertex) {
         if (!adjacencyMap.containsKey(vertex)) {
             adjacencyMap.put(vertex, new LinkedListHashMap<>());
-            numberOfVertices++;
         }
     }
     /**
@@ -67,7 +61,6 @@ public class Graph<K> {
     public void removeVertex(K vertex) {
         if (adjacencyMap.containsKey(vertex)) {
             adjacencyMap.remove(vertex);
-            numberOfVertices--;
 
         }
     }
@@ -100,7 +93,7 @@ public class Graph<K> {
      @return the number of vertices in the graph
      */
     public int getNumberOfVertices(){
-        return numberOfVertices;
+        return adjacencyMap.size();
     }
 
     /**
