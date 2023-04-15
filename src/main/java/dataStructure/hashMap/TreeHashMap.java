@@ -65,7 +65,7 @@ public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
     }
 
     private int hash(K key) {
-        return key.hashCode() % table.length;
+        return Math.abs(key.hashCode() % table.length);
     }
 
     private Node<K, V> insert(Node<K, V> node, K key, V value) {

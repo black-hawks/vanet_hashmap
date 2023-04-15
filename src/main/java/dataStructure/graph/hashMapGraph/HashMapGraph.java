@@ -3,67 +3,67 @@ package dataStructure.graph.hashMapGraph;
 
 import dataStructure.graph.Graph;
 import dataStructure.hashMap.Entry;
+import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
+import dataStructure.hashMap.TreeHashMap;
+
 import java.util.*;
 
 /**
-
- A class representing an undirected graph.
-
- @param <K> the type of the vertices in the graph
+ * A class representing an undirected graph.
+ *
+ * @param <K> the type of the vertices in the graph
  */
 
-public class HashMapGraph<K> implements Graph<K> {
+public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     /**
-
-     The adjacency map of the graph.
+     * The adjacency map of the graph.
      */
-    private final LinkedListHashMap<K, LinkedListHashMap<K, Integer>> adjacencyMap;
+    private final HashMap<K, HashMap<K, Integer>> adjacencyMap;
     /**
-
-     The number of vertices in the graph.
+     * The number of vertices in the graph.
      */
     private int numberOfVertices;
 
     /**
-
-     Constructs a new empty graph.
+     * Constructs a new empty graph.
      */
-    public HashMapGraph() {
-        adjacencyMap = new LinkedListHashMap<>();
+    public HashMapGraph(HashMap<K, HashMap<K, Integer>> hashMap) {
+        adjacencyMap = hashMap;
         numberOfVertices = 0;
     }
 
     /**
-
-     Adds a vertex to the graph if it doesn't already exist.
-     @param vertex the vertex to be added
+     * Adds a vertex to the graph if it doesn't already exist.
+     *
+     * @param vertex the vertex to be added
      */
     public void addVertex(K vertex) {
         if (!adjacencyMap.containsKey(vertex)) {
-            adjacencyMap.put(vertex, new LinkedListHashMap<>());
+            adjacencyMap.put(vertex, createHashMap());
             numberOfVertices++;
         }
     }
-    /**
 
-     Adds an edge between two vertices with the given weight.
-     If the vertices don't exist, they are added to the graph.
-     @param source the source vertex
-     @param destination the destination vertex
-     @param weight the weight of the edge
+    /**
+     * Adds an edge between two vertices with the given weight.
+     * If the vertices don't exist, they are added to the graph.
+     *
+     * @param source      the source vertex
+     * @param destination the destination vertex
+     * @param weight      the weight of the edge
      */
     public void addEdge(K source, K destination, Integer weight) {
         addVertex(source);
         addVertex(destination);
         adjacencyMap.get(source).put(destination, weight);
-        adjacencyMap.get(destination).put(source,weight);
+        adjacencyMap.get(destination).put(source, weight);
     }
 
     /**
-
-     Removes a vertex from the graph, including all its edges.
-     @param vertex the vertex to be removed
+     * Removes a vertex from the graph, including all its edges.
+     *
+     * @param vertex the vertex to be removed
      */
     public void removeVertex(K vertex) {
         if (adjacencyMap.containsKey(vertex)) {
@@ -74,10 +74,10 @@ public class HashMapGraph<K> implements Graph<K> {
     }
 
     /**
-
-     Removes an edge between two vertices, if it exists.
-     @param source the source vertex
-     @param destination the destination vertex
+     * Removes an edge between two vertices, if it exists.
+     *
+     * @param source      the source vertex
+     * @param destination the destination vertex
      */
     public void removeEdge(K source, K destination) {
         if (adjacencyMap.containsKey(source) && adjacencyMap.get(source).containsKey(destination)) {
@@ -87,31 +87,31 @@ public class HashMapGraph<K> implements Graph<K> {
     }
 
     /**
-
-     Returns the adjacency map of the graph.
-     @return the adjacency map of the graph
+     * Returns the adjacency map of the graph.
+     *
+     * @return the adjacency map of the graph
      */
-    public LinkedListHashMap<K, LinkedListHashMap<K, Integer>> getAdjacencyMap() {
+    public HashMap<K, HashMap<K, Integer>> getAdjacencyMap() {
         return adjacencyMap;
     }
 
     /**
-
-     Returns the number of vertices in the graph.
-     @return the number of vertices in the graph
+     * Returns the number of vertices in the graph.
+     *
+     * @return the number of vertices in the graph
      */
-    public int getNumberOfVertices(){
+    public int getNumberOfVertices() {
         return numberOfVertices;
     }
 
     /**
-
-     Computes and returns the shortest paths from the given source vertex to all other vertices in the graph,
-     using the Breadth-First Search (BFS) algorithm.
-
-     The distances are represented by Route objects containing the distance and the path of vertices.
-     @param source the source vertex
-     @return a HashMap containing the shortest routes from the source to each vertex
+     * Computes and returns the shortest paths from the given source vertex to all other vertices in the graph,
+     * using the Breadth-First Search (BFS) algorithm.
+     * <p>
+     * The distances are represented by Route objects containing the distance and the path of vertices.
+     *
+     * @param source the source vertex
+     * @return a HashMap containing the shortest routes from the source to each vertex
      */
     public LinkedListHashMap<K, Route<K>> bfs(K source) {
         LinkedListHashMap<K, Route<K>> distances = new LinkedListHashMap<>();
@@ -126,7 +126,7 @@ public class HashMapGraph<K> implements Graph<K> {
 
         while (!queue.isEmpty()) {
             K current = queue.poll();
-            LinkedListHashMap<K, Integer> innerMap = adjacencyMap.get(current);
+            HashMap<K, Integer> innerMap = adjacencyMap.get(current);
 
             for (Entry<K, Integer> innerEntry : innerMap.entries()) {
                 K neighbor = innerEntry.getKey();
@@ -163,11 +163,11 @@ public class HashMapGraph<K> implements Graph<K> {
     }
 
     /**
-
-     Returns the shortest path between a source vertex and a destination vertex in the graph.
-     @param source the source vertex
-     @param destination the destination vertex
-     @return the shortest path between the source and destination vertices as a Route object
+     * Returns the shortest path between a source vertex and a destination vertex in the graph.
+     *
+     * @param source      the source vertex
+     * @param destination the destination vertex
+     * @return the shortest path between the source and destination vertices as a Route object
      */
     public Route<K> shortestPath(K source, K destination) {
         // Call bfs to get distances and parents maps
@@ -176,14 +176,24 @@ public class HashMapGraph<K> implements Graph<K> {
     }
 
     /**
-
-     Helper method to extract the shortest path from the distances map.
-     @param distances a HashMap containing the distances and paths for all vertices from the source vertex
-     @param destination the vertex to extract the path for
-     @return the shortest path for the specified vertex as a Route object
+     * Helper method to extract the shortest path from the distances map.
+     *
+     * @param distances   a HashMap containing the distances and paths for all vertices from the source vertex
+     * @param destination the vertex to extract the path for
+     * @return the shortest path for the specified vertex as a Route object
      */
     public Route<K> getParents(LinkedListHashMap<K, Route<K>> distances, K destination) {
-       return distances.get(destination);
+        return distances.get(destination);
+    }
+
+    private HashMap<K, Integer> createHashMap() {
+        if (adjacencyMap instanceof LinkedListHashMap<K, HashMap<K, Integer>>) {
+            return new LinkedListHashMap<>();
+        } else if (adjacencyMap instanceof TreeHashMap<K, HashMap<K, Integer>>) {
+            return new TreeHashMap<>();
+        } else {
+            throw new IllegalArgumentException("Invalid HashMap type");
+        }
     }
 
 }

@@ -3,10 +3,10 @@ package simulation;
 /**
  * The Vehicle class represents a vehicle that can send and receive messages in the simulation.
  */
-public class Vehicle {
+public class Vehicle implements Comparable<Vehicle> {
 
-    private String vehicleId;
-    private int speed;
+    private final String vehicleId;
+    private final int speed;
 
 
     public Vehicle(String vehicleId) {
@@ -48,5 +48,14 @@ public class Vehicle {
                 "vehicleId='" + vehicleId + '\'' +
                 ", speed=" + speed +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Vehicle o) {
+        if (this == o) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }
