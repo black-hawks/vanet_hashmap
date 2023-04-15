@@ -6,7 +6,6 @@ The vehicle structure is represented as a graph in VANET. Each vehicle is repres
 
 We have implemented the VANET as a Hashmap of Hashmaps. The key for each vehicle represents a vertex, and the corresponding value is yet another hashmap which contains the neighbouring vertex, along with their corresponding edge weights. Since VANETs deal with real-time data, vehicles may be added and removed from the network continuously. This generates a lot of insertions and deletions to the data structure being used. Hashmaps have insertions and deletions in constant time as compared to lists that have O(n) lookup times.
 
-
 We have implemented both LinkedListHashMap and TreeHashMap to compare their differences. The TreeHashMap has shown significantly improved performances for lookup, insertion, and deletion operations in case of a collision since BST has a time complexity O(log n) when compared to a linked list that has a time complexity of O(n). 
 
 As the number of edges in the graph increases, the Hash Map implementation exhibits a significant advantage over the Adjacency List implementation in terms of the time taken for adding edges. The Binary Search Tree implementation performed well in handling collisions as it takes O(log n) time to insert an element when a collision has occurred. 
