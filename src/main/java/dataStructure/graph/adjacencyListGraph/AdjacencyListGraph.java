@@ -3,15 +3,15 @@ package dataStructure.graph.adjacencyListGraph;
 import dataStructure.graph.Graph;
 import dataStructure.graph.Route;
 
-import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 public class AdjacencyListGraph<V> implements Graph<V> {
 
     private List<V> vertices;
-    private List<Node<V,Edge<V>>> adjacencyList;
+    private List<Node<V, Edge<V>>> adjacencyList;
 
     public AdjacencyListGraph() {
         vertices = new ArrayList<>();
@@ -21,8 +21,10 @@ public class AdjacencyListGraph<V> implements Graph<V> {
 
     @Override
     public void addVertex(V vertex) {
-        vertices.add(vertex);
-        adjacencyList.add(new Node<>(vertex, new LinkedList<>()));
+        if (!vertices.contains(vertex)) {
+            vertices.add(vertex);
+            adjacencyList.add(new Node<>(vertex, new LinkedList<>()));
+        }
     }
 
     /**
@@ -32,7 +34,8 @@ public class AdjacencyListGraph<V> implements Graph<V> {
      */
     @Override
     public void addEdge(V source, V destination, Integer weight) {
-
+        addVertex(source);
+        addVertex(destination);
         int sourceIndex = vertices.indexOf(source);
         int destinationIndex = vertices.indexOf(destination);
 
@@ -60,7 +63,7 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         int indexToRemove = vertices.indexOf(vertex);
 
         if (indexToRemove == -1) {
-            throw new IllegalArgumentException("Vertex not found");
+            return;
         }
 
         // Remove all edges containing the key
@@ -94,17 +97,17 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         sourceNode = removeEdgeFromList(sourceNode);
 
         // Remove the edge from the destination key
-       destinationNode = removeEdgeFromList(destinationNode);
+        destinationNode = removeEdgeFromList(destinationNode);
     }
 
-    private Node<V, Edge<V>> removeEdgeFromList(Node<V, Edge<V>> node){
-        for(Edge edge : node.getEdgeList())
+    private Node<V, Edge<V>> removeEdgeFromList(Node<V, Edge<V>> node) {
+        for (Edge edge : node.getEdgeList())
             if (edge.getVertex().equals(edge))
                 node.getEdgeList().remove(edge);
         return node;
     }
 
-    public List<Node<V,Edge<V>>> getAdjacencyList(){
+    public List<Node<V, Edge<V>>> getAdjacencyList() {
         return adjacencyList;
     }
 
@@ -116,7 +119,7 @@ public class AdjacencyListGraph<V> implements Graph<V> {
     @Override
     public Route<V> shortestPath(V source, V destination) {
         List<Pair<V, Route<V>>> distances = bfs(source);
-        if(distances == null){
+        if (distances == null) {
             System.out.println("Path not Found between the Source and Destination");
         }
         return (getParents(distances, destination));
@@ -135,12 +138,12 @@ public class AdjacencyListGraph<V> implements Graph<V> {
      */
     @Override
     public int getNumberOfVertices() {
-       return vertices.size();
+        return vertices.size();
     }
 
-    private Route<V> getParents(List<Pair<V, Route<V>>> distances, V destination ) {
-        for(Pair<V, Route<V>> node : distances){
-            if(node.getKey().equals(distances)){
+    private Route<V> getParents(List<Pair<V, Route<V>>> distances, V destination) {
+        for (Pair<V, Route<V>> node : distances) {
+            if (node.getKey().equals(distances)) {
                 return node.getValue();
             }
         }

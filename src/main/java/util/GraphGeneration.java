@@ -58,7 +58,7 @@ public class GraphGeneration {
 
         // delete vertices
         for (Vehicle source : randomKeys) {
-            if(graph instanceof HashMapGraph<Vehicle> hashMapGraph){
+            if (graph instanceof HashMapGraph<Vehicle> hashMapGraph) {
                 HashMap<Vehicle, Integer> innerMap = hashMapGraph.getAdjacencyMap().get(source);
                 for (Entry<Vehicle, Integer> innerEntry : innerMap.entries()) {
                     Vehicle destination = innerEntry.getKey();
@@ -92,18 +92,26 @@ public class GraphGeneration {
 
     public static List<VanetEntry> generateVanetData(int maxVertices) {
         List<Vehicle> vehicles = generateVehicleData(maxVertices);
+        return generateEdges(vehicles);
+    }
+
+    public static List<VanetEntry> generateVanetData(List<Vehicle> vehicles) {
+        return generateEdges(vehicles);
+    }
+
+    public static List<VanetEntry> generateEdges(List<Vehicle> vehicles) {
         List<VanetEntry> vanetData = new ArrayList<>();
         int threshold = (int) (vehicles.size() / 1.3);
-        for (Vehicle sourceVehicle : vehicles) {
+        for (int j = 0; j < vehicles.size(); j++) {
             for (int i = 0; i < threshold; i++) {
-                int index = random.nextInt(vehicles.size() - 1);
-                if (index != i) {
-                    Vehicle destinationVehicle = vehicles.get(index);
-                    int weight = random.nextInt(MAX_WEIGHT);
-                    vanetData.add(new VanetEntry(sourceVehicle, destinationVehicle, weight));
-                }
+                int index;
+                do {
+                    index = random.nextInt(vehicles.size() - 1);
+                } while (index == j);
+                Vehicle destinationVehicle = vehicles.get(index);
+                int weight = random.nextInt(MAX_WEIGHT);
+                vanetData.add(new VanetEntry(vehicles.get(j), destinationVehicle, weight));
             }
-
         }
         return vanetData;
     }
