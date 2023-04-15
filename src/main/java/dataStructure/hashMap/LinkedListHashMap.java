@@ -39,7 +39,7 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
      * Constructs a new hash map with the specified initial capacity, resizable property, load factor and hash function.
      *
      * @param initialCapacity the initial capacity of the hash table
-     * @param resizable       whether or not the hash table is resizable
+     * @param resizable       whether the hash table is resizable
      * @param loadFactor      the load factor of the hash table
      * @param hashFunction    the hash function used to hash keys
      * @throws IllegalArgumentException if the initial capacity is negative or the load factor is non-positive or NaN
@@ -59,12 +59,11 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
         this.table = new Node[this.capacity];
     }
 
-
     /**
      * Constructs a new hash map with the specified capacity and resizable property.
      *
      * @param capacity  the capacity of the hash table
-     * @param resizable whether or not the hash table is resizable
+     * @param resizable whether the hash table is resizable
      */
     public LinkedListHashMap(int capacity, boolean resizable) {
         this(capacity, resizable, DEFAULT_LOAD_FACTOR);
@@ -89,9 +88,9 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
     /**
      * Constructs a new hash map with the specified capacity, resizable property and load factor.
      *
-     * @param capacity    the capacity of the hash table
-     * @param resizable   whether or not the hash table is resizable
-     * @param loadFactor  the load factor of the hash table
+     * @param capacity   the capacity of the hash table
+     * @param resizable  whether or not the hash table is resizable
+     * @param loadFactor the load factor of the hash table
      * @throws IllegalArgumentException if the load factor is non-positive or NaN
      */
     public LinkedListHashMap(int capacity, boolean resizable, float loadFactor) {
@@ -119,9 +118,9 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
 
     /**
      * Associates the specified value with the specified key in this map.
-     * If the map previously contained a mapping for the key, the old value is replaced.
+     * If the map previously contained a mapping for the key, the value is added to end of the linked list.
      *
-     * @param key the key with which the specified value is to be associated
+     * @param key   the key with which the specified value is to be associated
      * @param value the value to be associated with the specified key
      */
     public void put(K key, V value) {
@@ -154,7 +153,8 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
     }
 
     /**
-     * Returns the value associated with the specified key in this hash table.
+     * Returns the value associated with the specified key in this hash table. If the node's next is not null, it will
+     * traverse to the find the element in the linked list.
      *
      * @param key the key whose associated value is to be returned
      * @return the value associated with the specified key, or {@code null} if this map contains no mapping for the key

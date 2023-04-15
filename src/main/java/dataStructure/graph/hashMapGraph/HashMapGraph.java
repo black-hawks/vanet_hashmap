@@ -113,12 +113,10 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
         HashMap<K, Route<K>> distances = new LinkedListHashMap<>();
         Queue<K> queue = new LinkedList<>();
         Set<K> visited = new HashSet<>();
-        //HashMap<K, K> parents = new LinkedListHashMap<>();
 
         queue.offer(source);
         visited.add(source);
-        distances.put(source, new Route(0, new ArrayList<>()));
-        //parents.put(source, null);
+        distances.put(source, new Route<>(0, new ArrayList<>()));
 
         while (!queue.isEmpty()) {
             K current = queue.poll();
@@ -133,14 +131,12 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route(distance, path));
-                    //parents.put(neighbor, current);
+                    distances.put(neighbor, new Route<>(distance, path));
                 } else if (distances.get(neighbor).getDistance() > distances.get(current).getDistance() + innerEntry.getValue()) {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route(distance, path));
-                    //parents.put(neighbor, current);
+                    distances.put(neighbor, new Route<>(distance, path));
                 }
             }
         }

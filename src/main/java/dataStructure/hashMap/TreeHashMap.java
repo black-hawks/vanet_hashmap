@@ -259,12 +259,9 @@ public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
     }
 
     /**
-     * Deletes the node with the given key from the tree rooted at the given node.
-     * If the key is not found in the tree, the original node is returned.
-     *
-     * @param node the root of the tree to delete from
-     * @param key the key to search for and delete
-     * @return the root of the modified tree after the deletion
+     * Resizes the tree by doubling the capacity and copying data from
+     * old table to new table. If collisions are found, tree is traversed
+     * and rehashed the keys to find the new location.
      */
     public void resize() {
         int newCapacity = capacity * 2;
