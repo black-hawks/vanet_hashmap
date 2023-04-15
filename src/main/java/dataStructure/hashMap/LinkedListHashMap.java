@@ -6,12 +6,15 @@ import java.util.List;
 public class LinkedListHashMap<K, V> implements HashMap<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    private static final boolean DEFAULT_RESIZABLE = true;
     private final float loadFactor;
     private int capacity;
     private int size;
+    private final boolean resizable;
+
     private Node<K, V>[] table;
 
-    public LinkedListHashMap(int initialCapacity, float loadFactor) {
+    public LinkedListHashMap(int initialCapacity, boolean resizable, float loadFactor) {
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal initial capacity: " +
                     initialCapacity);
@@ -20,16 +23,22 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
                     loadFactor);
         this.loadFactor = loadFactor;
         this.capacity = initialCapacity;
+        this.resizable = resizable;
         //noinspection unchecked
         this.table = new Node[this.capacity];
     }
 
+
+    public LinkedListHashMap(int capacity, boolean resizable) {
+        this(capacity, resizable, DEFAULT_LOAD_FACTOR);
+    }
+
     public LinkedListHashMap(int initialCapacity) {
-        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+        this(initialCapacity, DEFAULT_RESIZABLE, DEFAULT_LOAD_FACTOR);
     }
 
     public LinkedListHashMap() {
-        this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
+        this(DEFAULT_CAPACITY, DEFAULT_RESIZABLE, DEFAULT_LOAD_FACTOR);
     }
 
     public int size() {
@@ -64,7 +73,7 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
                 size++;
             }
         }
-        if ((float) size / capacity >= loadFactor) {
+        if (resizable && (float) size / capacity >= loadFactor) {
             resize();
         }
     }

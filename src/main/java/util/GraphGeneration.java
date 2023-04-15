@@ -3,7 +3,7 @@ package util;
 import dataStructure.graph.Graph;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.Entry;
-import dataStructure.hashMap.LinkedListHashMap;
+import dataStructure.hashMap.HashMap;
 import simulation.Vehicle;
 
 import java.util.*;
@@ -31,9 +31,10 @@ public class GraphGeneration {
      * @param maxVertices number of vertices in the graph.
      * @return The generated graph.
      */
-    public static HashMapGraph<Vehicle> generateRandomWeightedGraph(int maxVertices) {
+    public static HashMapGraph<Vehicle> generateRandomWeightedGraph(
+            HashMap<Vehicle, HashMap<Vehicle, Integer>> hashMap, int maxVertices) {
         List<VanetEntry> vanetData = generateVanetData(maxVertices);
-        return createGraph(vanetData);
+        return createGraph(hashMap, vanetData);
     }
 
     /**
@@ -46,21 +47,19 @@ public class GraphGeneration {
     public static HashMapGraph<Vehicle> deleteVertices(HashMapGraph<Vehicle> graph, int maxVertices) {
 
         // create a hashset to store the randomly selected keys
-        Set<Vehicle> randomKeys = new HashSet<Vehicle>();
+        Set<Vehicle> randomKeys = new HashSet<>();
 
         Object[] keys = graph.getAdjacencyMap().keys().toArray();
 
         // generate random unique keys until the hashset contains 10 keys
         while (randomKeys.size() < maxVertices) {
             Vehicle v = (Vehicle) keys[random.nextInt(graph.getNumberOfVertices())];
-            if (!randomKeys.contains(v)) {
-                randomKeys.add(v);
-            }
+            randomKeys.add(v);
         }
 
         // delete vertices
         for (Vehicle source : randomKeys) {
-            LinkedListHashMap<Vehicle, Integer> innerMap = graph.getAdjacencyMap().get(source);
+            HashMap<Vehicle, Integer> innerMap = graph.getAdjacencyMap().get(source);
             for (Entry<Vehicle, Integer> innerEntry : innerMap.entries()) {
                 Vehicle destination = innerEntry.getKey();
                 graph.removeEdge(source, destination);
@@ -71,8 +70,9 @@ public class GraphGeneration {
 
     }
 
-    public static HashMapGraph<Vehicle> createGraph(List<VanetEntry> vanetData) {
-        HashMapGraph<Vehicle> graph = new HashMapGraph<>();
+    public static HashMapGraph<Vehicle> createGraph(
+            HashMap<Vehicle, HashMap<Vehicle, Integer>> hashMap, List<VanetEntry> vanetData) {
+        HashMapGraph<Vehicle> graph = new HashMapGraph<>(hashMap);
         for (VanetEntry vanetEntry : vanetData) {
             graph.addEdge(
                     vanetEntry.getSourceVehicle(),

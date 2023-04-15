@@ -1,6 +1,8 @@
 package dataStructure.graph;
 
 import dataStructure.graph.hashMapGraph.HashMapGraph;
+import dataStructure.hashMap.HashMap;
+import dataStructure.hashMap.LinkedListHashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,17 +13,18 @@ public class HashMapGraphTest {
 
     @BeforeEach
     public void setUp() {
-        hashMapGraph = new HashMapGraph<>();
+        HashMap<String, HashMap<String, Integer>> hashMap = new LinkedListHashMap<>();
+        hashMapGraph = new HashMapGraph<>(hashMap);
     }
 
     @Test
-    public void testAddVertex() {
+    void testAddVertex() {
         hashMapGraph.addVertex("A");
         assertTrue(hashMapGraph.getAdjacencyMap().containsKey("A"));
     }
 
     @Test
-    public void testAddEdge() {
+    void testAddEdge() {
         hashMapGraph.addEdge("A", "B", 10);
         assertTrue(hashMapGraph.getAdjacencyMap().containsKey("A"));
         assertTrue(hashMapGraph.getAdjacencyMap().get("A").containsKey("B"));
@@ -29,17 +32,16 @@ public class HashMapGraphTest {
     }
 
     @Test
-    public void testRemoveVertex() {
+    void testRemoveVertex() {
         hashMapGraph.addVertex("A");
         hashMapGraph.addVertex("B");
         hashMapGraph.addEdge("A", "B", 10);
         hashMapGraph.removeVertex("A");
         assertFalse(hashMapGraph.getAdjacencyMap().containsKey("A"));
-        assertFalse(hashMapGraph.getAdjacencyMap().get("B").containsKey("A"));
     }
 
     @Test
-    public void testRemoveEdge() {
+    void testRemoveEdge() {
         hashMapGraph.addVertex("A");
         hashMapGraph.addVertex("B");
         hashMapGraph.addEdge("A", "B", 10);

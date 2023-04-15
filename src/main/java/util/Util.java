@@ -3,6 +3,7 @@ package util;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.graph.Route;
 import dataStructure.hashMap.Entry;
+import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
 import simulation.Vehicle;
 
@@ -20,10 +21,10 @@ public class Util {
      */
     public static void printGraph(HashMapGraph<Vehicle> graph){
         System.out.println("Random Weighted HashMapGraph:");
-        for (Entry<Vehicle, LinkedListHashMap<Vehicle, Integer>> entry : graph.getAdjacencyMap().entries()) {
+        for (Entry<Vehicle, HashMap<Vehicle, Integer>> entry : graph.getAdjacencyMap().entries()) {
             Vehicle key = entry.getKey();
             System.out.print(key.getVehicleId() + " : ");
-            LinkedListHashMap<Vehicle, Integer> innerMap = entry.getValue();
+            HashMap<Vehicle, Integer> innerMap = entry.getValue();
             for(Entry<Vehicle, Integer> innerEntry : innerMap.entries()){
                 System.out.print( "< " + innerEntry.getKey().getVehicleId() + " , "+ innerEntry.getValue() + " > ");
             }
