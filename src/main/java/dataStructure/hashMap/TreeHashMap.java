@@ -1,6 +1,9 @@
 package dataStructure.hashMap;
 
-public class TreeHashHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private Node<K, V>[] table;
@@ -8,15 +11,15 @@ public class TreeHashHashMap<K extends Comparable<K>, V> implements HashMap<K, V
     private int capacity;
     private final float loadFactor;
 
-    public TreeHashHashMap() {
+    public TreeHashMap() {
         this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
     }
 
-    public TreeHashHashMap(int capacity) {
+    public TreeHashMap(int capacity) {
         this(capacity, DEFAULT_LOAD_FACTOR);
     }
 
-    public TreeHashHashMap(int initialCapacity, float loadFactor) {
+    public TreeHashMap(int initialCapacity, float loadFactor) {
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal initial capacity: " +
                     initialCapacity);
@@ -62,7 +65,7 @@ public class TreeHashHashMap<K extends Comparable<K>, V> implements HashMap<K, V
     }
 
     private int hash(K key) {
-        return Math.abs(key.hashCode()) % table.length;
+        return key.hashCode() % table.length;
     }
 
     private Node<K, V> insert(Node<K, V> node, K key, V value) {
@@ -144,6 +147,57 @@ public class TreeHashHashMap<K extends Comparable<K>, V> implements HashMap<K, V
             resizeHelper(node.left);
             resizeHelper(node.right);
         }
+    }
+
+    public List<K> keys() {
+        List<K> keysList = new ArrayList<>();
+        for (Node<K, V> node : table) {
+            getKeys(node, keysList);
+        }
+        return keysList;
+    }
+
+    private void getKeys(Node<K, V> node, List<K> keysList) {
+        if (node == null) {
+            return;
+        }
+        getKeys(node.left, keysList);
+        keysList.add(node.key);
+        getKeys(node.right, keysList);
+    }
+
+    public List<V> values() {
+        List<V> valuesList = new ArrayList<>();
+        for (Node<K, V> node : table) {
+            getValues(node, valuesList);
+        }
+        return valuesList;
+    }
+
+    private void getValues(Node<K, V> node, List<V> valuesList) {
+        if (node == null) {
+            return;
+        }
+        getValues(node.left, valuesList);
+        valuesList.add(node.value);
+        getValues(node.right, valuesList);
+    }
+
+    public List<Entry<K, V>> entries() {
+        List<Entry<K, V>> entriesList = new ArrayList<>();
+        for (Node<K, V> node : table) {
+            getEntries(node, entriesList);
+        }
+        return entriesList;
+    }
+
+    private void getEntries(Node<K, V> node, List<Entry<K, V>> entriesList) {
+        if (node == null) {
+            return;
+        }
+        getEntries(node.left, entriesList);
+        entriesList.add(new Entry<>(node.key, node.value));
+        getEntries(node.right, entriesList);
     }
 
     private static class Node<K, V> {

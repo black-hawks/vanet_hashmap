@@ -10,12 +10,12 @@ public class Route<K> {
     /**
      The distance of the route.
      */
-    private int distance;
+    private final int distance;
 
     /**
      The path of vertices in the route.
      */
-    private List<K> path;
+    private final List<K> path;
 
     /**
      Constructs a new Route object with the given distance and path.

@@ -1,9 +1,7 @@
 package dataStructure.hashMap;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LinkedListHashMap<K, V> implements HashMap<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
@@ -135,110 +133,41 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
         capacity = newCapacity;
     }
 
-    public Iterator<K> keys() {
-        return new KeyIterator();
-    }
-
-    public Iterator<V> values() {
-        return new ValueIterator();
-    }
-
-    public Iterator<Entry<K, V>> entries() {
-        return new EntryIterator();
-    }
-
-    private class KeyIterator implements Iterator<K> {
-        private int currentIndex = -1;
-        private Node<K, V> currentNode = null;
-
-        public boolean hasNext() {
-            if (currentNode != null && currentNode.next != null) {
-                return true;
+    public List<K> keys() {
+        List<K> keys = new ArrayList<>();
+        for (int i = 0; i < capacity; i++) {
+            Node<K, V> node = table[i];
+            while (node != null) {
+                keys.add(node.key);
+                node = node.next;
             }
-            for (int i = currentIndex + 1; i < capacity; i++) {
-                if (table[i] != null) {
-                    return true;
-                }
-            }
-            return false;
         }
-
-        public K next() {
-            if (currentNode != null && currentNode.next != null) {
-                currentNode = currentNode.next;
-            } else {
-                do {
-                    currentIndex++;
-                    if (currentIndex >= capacity) {
-                        throw new NoSuchElementException();
-                    }
-                    currentNode = table[currentIndex];
-                } while (currentNode == null);
-            }
-            return currentNode.key;
-        }
+        return keys;
     }
 
-    private class ValueIterator implements Iterator<V> {
-        private final Iterator<Entry<K, V>> entryIterator = new EntryIterator();
-
-        public boolean hasNext() {
-            return entryIterator.hasNext();
+    public List<V> values() {
+        List<V> values = new ArrayList<>();
+        for (int i = 0; i < capacity; i++) {
+            Node<K, V> node = table[i];
+            while (node != null) {
+                values.add(node.value);
+                node = node.next;
+            }
         }
-
-        public V next() {
-            return entryIterator.next().getValue();
-        }
+        return values;
     }
 
-    private class EntryIterator implements Iterator<Entry<K, V>> {
-        private int currentIndex = -1;
-        private Node<K, V> currentNode = null;
-
-        public boolean hasNext() {
-            if (currentNode != null && currentNode.next != null) {
-                return true;
+    public List<Entry<K, V>> entries() {
+        List<Entry<K, V>> entries = new ArrayList<>();
+        for (int i = 0; i < capacity; i++) {
+            Node<K, V> node = table[i];
+            while (node != null) {
+                Entry<K, V> entry = new Entry<>(node.key, node.value);
+                entries.add(entry);
+                node = node.next;
             }
-            for (int i = currentIndex + 1; i < capacity; i++) {
-                if (table[i] != null) {
-                    return true;
-                }
-            }
-            return false;
         }
-
-        public Entry<K, V> next() {
-            if (currentNode != null && currentNode.next != null) {
-                currentNode = currentNode.next;
-            } else {
-                do {
-                    currentIndex++;
-                    if (currentIndex >= capacity) {
-                        throw new NoSuchElementException();
-                    }
-                    currentNode = table[currentIndex];
-                } while (currentNode == null);
-            }
-            return new Entry<>(currentNode.key, currentNode.value);
-        }
-    }
-
-    public Set<Entry<K, V>> entrySet() {
-        Set<Entry<K, V>> entrySet = new HashSet<>();
-        Iterator<Entry<K, V>> iterator = entries();
-        while (iterator.hasNext()) {
-            entrySet.add(iterator.next());
-        }
-        return entrySet;
-    }
-
-    public Set<K> keySet() {
-        Set<K> keySet = new HashSet<>();
-        Iterator<K> iterator = keys();
-        while (iterator.hasNext()) {
-            keySet.add(iterator.next());
-        }
-        return keySet;
+        return entries;
     }
 
     private int hash(K key) {

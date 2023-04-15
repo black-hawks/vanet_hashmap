@@ -20,11 +20,11 @@ public class Util {
      */
     public static void printGraph(Graph<Vehicle> graph){
         System.out.println("Random Weighted Graph:");
-        for (Entry<Vehicle, LinkedListHashMap<Vehicle, Integer>> entry : graph.getAdjacencyMap().entrySet()) {
+        for (Entry<Vehicle, LinkedListHashMap<Vehicle, Integer>> entry : graph.getAdjacencyMap().entries()) {
             Vehicle key = entry.getKey();
             System.out.print(key.getVehicleId() + " : ");
             LinkedListHashMap<Vehicle, Integer> innerMap = entry.getValue();
-            for(Entry<Vehicle, Integer> innerEntry : innerMap.entrySet()){
+            for(Entry<Vehicle, Integer> innerEntry : innerMap.entries()){
                 System.out.print( "< " + innerEntry.getKey().getVehicleId() + " , "+ innerEntry.getValue() + " > ");
             }
             System.out.println();
@@ -37,7 +37,7 @@ public class Util {
      * @return a randomly picked vertex
      */
     public static Vehicle pickRandomVehicle(Graph<Vehicle> graph){
-        Object[] keys = graph.getAdjacencyMap().keySet().toArray();
+        Object[] keys = graph.getAdjacencyMap().keys().toArray();
         Random rand = new Random();
         Vehicle randomVehicle = (Vehicle) keys[rand.nextInt(keys.length)];
 
@@ -49,7 +49,7 @@ public class Util {
      * @param distances the shortest path distances and paths for each vertex
      */
     public static void printShortestPath(LinkedListHashMap<Vehicle, Route<Vehicle>> distances){
-        for(Entry<Vehicle, Route<Vehicle>> innerEntry : distances.entrySet()){
+        for(Entry<Vehicle, Route<Vehicle>> innerEntry : distances.entries()){
             System.out.print( innerEntry.getKey().getVehicleId() + " , ");
             printPath(innerEntry.getValue());
             System.out.println();

@@ -120,14 +120,14 @@ public class Graph<K> {
 
         queue.offer(source);
         visited.add(source);
-        distances.put(source, new Route(0, new ArrayList<>()));
+        distances.put(source, new Route<>(0, new ArrayList<>()));
         parents.put(source, null);
 
         while (!queue.isEmpty()) {
             K current = queue.poll();
             LinkedListHashMap<K, Integer> innerMap = adjacencyMap.get(current);
 
-            for (Entry<K, Integer> innerEntry : innerMap.entrySet()) {
+            for (Entry<K, Integer> innerEntry : innerMap.entries()) {
                 K neighbor = innerEntry.getKey();
 
                 if (!visited.contains(neighbor)) {
@@ -136,20 +136,20 @@ public class Graph<K> {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route(distance, path));
+                    distances.put(neighbor, new Route<>(distance, path));
                     parents.put(neighbor, current);
                 } else if (distances.get(neighbor).getDistance() > distances.get(current).getDistance() + innerEntry.getValue()) {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route(distance, path));
+                    distances.put(neighbor, new Route<>(distance, path));
                     parents.put(neighbor, current);
                 }
             }
         }
 
         // Add the path from the source to each node to the distances map
-        for (Entry<K, K> entry : parents.entrySet()) {
+        for (Entry<K, K> entry : parents.entries()) {
             K node = entry.getKey();
             List<K> path = new ArrayList<>();
             while (node != null) {
