@@ -1,7 +1,7 @@
 package simulation;
 
 import dataStructure.graph.hashMapGraph.HashMapGraph;
-import dataStructure.graph.hashMapGraph.Route;
+import dataStructure.graph.Route;
 import util.GraphGeneration;
 import java.util.*;
 
