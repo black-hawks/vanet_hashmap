@@ -7,6 +7,7 @@ import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
 import dataStructure.hashMap.TreeHashMap;
+import simulation.Vehicle;
 
 import java.util.*;
 
@@ -99,24 +100,23 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     }
 
     /**
-     * Computes and returns the shortest paths from the given source vertex to all other vertices in the graph,
-     * using the Breadth-First Search (BFS) algorithm.
-     * <p>
-     * The distances are represented by Route objects containing the distance and the path of vertices.
-     *
-     * @param source the source vertex
-     * @return a HashMap containing the shortest routes from the source to each vertex
+     Computes and returns the shortest paths from the given source vertex to all other vertices in the graph,
+     using the Breadth-First Search (BFS) algorithm.
+     The distances are represented by Route objects containing the distance and the path of vertices.
+     @param source the source vertex
+     @return a HashMap containing the shortest routes from the source to each vertex
      */
-    public LinkedListHashMap<K, Route<K>> bfs(K source) {
-        LinkedListHashMap<K, Route<K>> distances = new LinkedListHashMap<>();
+
+    public HashMap<K, Route<K>> bfs(K source) {
+        HashMap<K, Route<K>> distances = new LinkedListHashMap<>();
         Queue<K> queue = new LinkedList<>();
         Set<K> visited = new HashSet<>();
-        LinkedListHashMap<K, K> parents = new LinkedListHashMap<>();
+        //HashMap<K, K> parents = new LinkedListHashMap<>();
 
         queue.offer(source);
         visited.add(source);
-        distances.put(source, new Route<>(0, new ArrayList<>()));
-        parents.put(source, null);
+        distances.put(source, new Route(0, new ArrayList<>()));
+        //parents.put(source, null);
 
         while (!queue.isEmpty()) {
             K current = queue.poll();
@@ -131,30 +131,25 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route<>(distance, path));
-                    parents.put(neighbor, current);
+                    distances.put(neighbor, new Route(distance, path));
+                    //parents.put(neighbor, current);
                 } else if (distances.get(neighbor).getDistance() > distances.get(current).getDistance() + innerEntry.getValue()) {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route<>(distance, path));
-                    parents.put(neighbor, current);
+                    distances.put(neighbor, new Route(distance, path));
+                    //parents.put(neighbor, current);
                 }
             }
         }
 
-        // Add the path from the source to each node to the distances map
-        for (Entry<K, K> entry : parents.entries()) {
-            K node = entry.getKey();
-            List<K> path = new ArrayList<>();
-            while (node != null) {
-                path.add(0, node);
-                node = parents.get(node);
-            }
-            distances.get(entry.getKey()).getPath().addAll(path);
+        for(Entry<K, Route<K>> distance: distances.entries()){
+            K current = distance.getKey();
+            distance.getValue().getPath().add(current);
         }
         return distances;
     }
+
 
     /**
      * Returns the shortest path between a source vertex and a destination vertex in the graph.
@@ -165,7 +160,7 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
      */
     public Route<K> shortestPath(K source, K destination) {
         // Call bfs to get distances and parents maps
-        LinkedListHashMap<K, Route<K>> distances = bfs(source);
+        HashMap<K, Route<K>> distances = bfs(source);
         return (getParents(distances, destination));
     }
 
@@ -184,7 +179,7 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
      * @param destination the vertex to extract the path for
      * @return the shortest path for the specified vertex as a Route object
      */
-    private Route<K> getParents(LinkedListHashMap<K, Route<K>> distances, K destination) {
+    private Route<K> getParents(HashMap<K, Route<K>> distances, K destination) {
         return distances.get(destination);
     }
 

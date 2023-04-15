@@ -111,19 +111,6 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         return adjacencyList;
     }
 
-    /**
-     * @param source
-     * @param destination
-     * @return
-     */
-    @Override
-    public Route<V> shortestPath(V source, V destination) {
-        List<Pair<V, Route<V>>> distances = bfs(source);
-        if (distances == null) {
-            System.out.println("Path not Found between the Source and Destination");
-        }
-        return (getParents(distances, destination));
-    }
 
     /**
      * @return
@@ -141,6 +128,20 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         return vertices.size();
     }
 
+    /**
+     * @param source
+     * @param destination
+     * @return
+     */
+    @Override
+    public Route<V> shortestPath(V source, V destination) {
+        List<Pair<V, Route<V>>> distances = bfs(source);
+        if (distances == null) {
+            System.out.println("Path not Found between the Source and Destination");
+        }
+        return (getParents(distances, destination));
+    }
+
     private Route<V> getParents(List<Pair<V, Route<V>>> distances, V destination) {
         for (Pair<V, Route<V>> node : distances) {
             if (node.getKey().equals(distances)) {
@@ -149,21 +150,14 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         }
         return null;
     }
-
-    /**
-     * Performs a breadth-first search on the graph starting at the specified source vertex.
-     *
-     * @param source The source vertex to start the search from.
-     * @return A list of pairs representing the distance from the source vertex to each vertex in the graph, as well as the shortest path from the source to each vertex.
-     */
     public List<Pair<V, Route<V>>> bfs(V source) {
 
         List<Pair<V, Route<V>>> distances = new ArrayList<>();
-        List<V> visited = new ArrayList<>();
         Queue<V> queue = new LinkedList<>();
+        List<V> visited = new ArrayList<>();
 
         for (V vertex : vertices) {
-            distances.add(new Pair(vertex, new Route<>(0, new ArrayList<>())));
+            distances.add(new Pair<>(vertex, new Route<>(Integer.MAX_VALUE, new ArrayList<>())));
         }
 
         queue.offer(source);
@@ -177,25 +171,30 @@ public class AdjacencyListGraph<V> implements Graph<V> {
             V current = queue.poll();
             int currentIndex = vertices.indexOf(current);
 
-            for (Edge<V> neighbor : adjacencyList.get(currentIndex).getEdgeList()) {
 
-                V neighborVertex = neighbor.getVertex();
-                if (!visited.contains(neighborVertex)) {
-                    queue.offer(neighborVertex);
-                    visited.add(neighborVertex);
-                }
+                for (Edge<V> neighbor :adjacencyList.get(currentIndex).getEdgeList()) {
 
-                int neighborIndex = vertices.indexOf(neighborVertex);
-                int newDistance = distances.get(currentIndex).getValue().getDistance() + neighbor.getWeight();
+                    V neighborVertex = neighbor.getVertex();
+                    int neighborIndex = vertices.indexOf(neighborVertex);
 
-                if (newDistance < distances.get(neighborIndex).getValue().getDistance()) {
-                    distances.get(neighborIndex).getValue().setDistance(newDistance);
-                    distances.get(neighborIndex).getValue().getPath().add(current);
+                    if (!visited.contains(neighborVertex)) {
+                        queue.offer(neighborVertex);
+                        visited.add(neighborVertex);
+                    }
+
+                    int newDistance = distances.get(currentIndex).getValue().getDistance() + neighbor.getWeight();
+
+                    if (newDistance < distances.get(neighborIndex).getValue().getDistance()) {
+                        distances.get(neighborIndex).getValue().setDistance(newDistance);
+                        distances.get(neighborIndex).getValue().getPath().clear();
+                        distances.get(neighborIndex).getValue().getPath().addAll(distances.get(currentIndex).getValue().getPath());
+                        distances.get(neighborIndex).getValue().getPath().add(current);
+                    }
                 }
             }
-        }
 
         return distances;
     }
+
 
 }

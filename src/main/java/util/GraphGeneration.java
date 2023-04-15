@@ -18,6 +18,7 @@ public class GraphGeneration {
      */
     private static final int MAX_WEIGHT = 100;
 
+    private static final int MIN_WEIGHT = 10;
     private static final int MAX_SPEED = 140;
 
     /**
@@ -82,6 +83,7 @@ public class GraphGeneration {
         return graph;
     }
 
+
     public static List<Vehicle> generateVehicleData(int maxVertices) {
         List<Vehicle> vehicles = new ArrayList<>();
         for (int i = 0; i < maxVertices; i++) {
@@ -109,7 +111,7 @@ public class GraphGeneration {
                     index = random.nextInt(vehicles.size() - 1);
                 } while (index == j);
                 Vehicle destinationVehicle = vehicles.get(index);
-                int weight = random.nextInt(MAX_WEIGHT);
+                int weight = random.nextInt((MAX_WEIGHT - MIN_WEIGHT) + 1) + MIN_WEIGHT;
                 vanetData.add(new VanetEntry(vehicles.get(j), destinationVehicle, weight));
             }
         }
