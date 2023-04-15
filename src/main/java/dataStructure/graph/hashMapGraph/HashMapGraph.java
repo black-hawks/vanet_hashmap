@@ -11,28 +11,32 @@ import dataStructure.hashMap.TreeHashMap;
 import java.util.*;
 
 /**
- * A class representing an undirected graph.
+ * A graph implementation using HashMap to store the adjacency map.
  *
- * @param <K> the type of the vertices in the graph
+ * @param <K> the type of vertex keys in the graph, must implement Comparable interface
  */
-
 public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
+
     /**
-     * The adjacency map of the graph.
+     * The adjacency map of the graph. Each key is a vertex in the graph and the value is a map
+     * of adjacent vertices and their edge weights.
      */
     private final HashMap<K, HashMap<K, Integer>> adjacencyMap;
 
+
     /**
-     * Constructs a new empty graph.
+     * Constructs a new graph with the given adjacency map.
+     *
+     * @param hashMap the adjacency map of the graph
      */
     public HashMapGraph(HashMap<K, HashMap<K, Integer>> hashMap) {
         adjacencyMap = hashMap;
     }
 
     /**
-     * Adds a vertex to the graph if it doesn't already exist.
+     * Adds a vertex to the graph.
      *
-     * @param vertex the vertex to be added
+     * @param vertex the vertex to add
      */
     public void addVertex(K vertex) {
         if (!adjacencyMap.containsKey(vertex)) {
@@ -41,11 +45,11 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     }
 
     /**
-     * Adds an edge between two vertices with the given weight.
-     * If the vertices don't exist, they are added to the graph.
+     * Adds an undirected edge to the graph between the given source and destination vertices with
+     * the given weight.
      *
-     * @param source      the source vertex
-     * @param destination the destination vertex
+     * @param source      the source vertex of the edge
+     * @param destination the destination vertex of the edge
      * @param weight      the weight of the edge
      */
     public void addEdge(K source, K destination, Integer weight) {
@@ -56,9 +60,9 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     }
 
     /**
-     * Removes a vertex from the graph, including all its edges.
+     * Removes a vertex from the graph.
      *
-     * @param vertex the vertex to be removed
+     * @param vertex the vertex to remove
      */
     public void removeVertex(K vertex) {
         if (adjacencyMap.containsKey(vertex)) {
@@ -68,10 +72,10 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     }
 
     /**
-     * Removes an edge between two vertices, if it exists.
+     * Removes an undirected edge from the graph between the given source and destination vertices.
      *
-     * @param source      the source vertex
-     * @param destination the destination vertex
+     * @param source      the source vertex of the edge
+     * @param destination the destination vertex of the edge
      */
     public void removeEdge(K source, K destination) {
         if (adjacencyMap.containsKey(source) && adjacencyMap.get(source).containsKey(destination)) {
@@ -99,23 +103,20 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     }
 
     /**
-     Computes and returns the shortest paths from the given source vertex to all other vertices in the graph,
-     using the Breadth-First Search (BFS) algorithm.
-     The distances are represented by Route objects containing the distance and the path of vertices.
-     @param source the source vertex
-     @return a HashMap containing the shortest routes from the source to each vertex
+     * Performs breadth-first search on the graph starting from the given source vertex and returns
+     * a map of vertices and their shortest routes from the source.
+     *
+     * @param source the source vertex of the search
+     * @return a map of vertices and their shortest routes from the source
      */
-
     public HashMap<K, Route<K>> bfs(K source) {
         HashMap<K, Route<K>> distances = new LinkedListHashMap<>();
         Queue<K> queue = new LinkedList<>();
         Set<K> visited = new HashSet<>();
-        //HashMap<K, K> parents = new LinkedListHashMap<>();
 
         queue.offer(source);
         visited.add(source);
-        distances.put(source, new Route(0, new ArrayList<>()));
-        //parents.put(source, null);
+        distances.put(source, new Route<>(0, new ArrayList<>()));
 
         while (!queue.isEmpty()) {
             K current = queue.poll();
@@ -130,14 +131,12 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route(distance, path));
-                    //parents.put(neighbor, current);
+                    distances.put(neighbor, new Route<>(distance, path));
                 } else if (distances.get(neighbor).getDistance() > distances.get(current).getDistance() + innerEntry.getValue()) {
                     int distance = distances.get(current).getDistance() + innerEntry.getValue();
                     List<K> path = new ArrayList<>(distances.get(current).getPath());
                     path.add(current);
-                    distances.put(neighbor, new Route(distance, path));
-                    //parents.put(neighbor, current);
+                    distances.put(neighbor, new Route<>(distance, path));
                 }
             }
         }
@@ -149,13 +148,12 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
         return distances;
     }
 
-
     /**
-     * Returns the shortest path between a source vertex and a destination vertex in the graph.
+     * Finds the shortest path from the source vertex to the destination vertex using Breadth-First Search algorithm.
      *
-     * @param source      the source vertex
-     * @param destination the destination vertex
-     * @return the shortest path between the source and destination vertices as a Route object
+     * @param source the starting vertex
+     * @param destination the ending vertex
+     * @return a Route object representing the shortest path from source to destination
      */
     public Route<K> shortestPath(K source, K destination) {
         // Call bfs to get distances and parents maps
@@ -164,7 +162,9 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     }
 
     /**
-     * @return
+     * Returns a list of vertices in the graph.
+     *
+     * @return a list of vertices in the graph
      */
     @Override
     public List<K> getVertices() {
@@ -172,16 +172,22 @@ public class HashMapGraph<K extends Comparable<K>> implements Graph<K> {
     }
 
     /**
-     * Helper method to extract the shortest path from the distances map.
+     * Returns the Route object for a given destination vertex.
      *
-     * @param distances   a HashMap containing the distances and paths for all vertices from the source vertex
-     * @param destination the vertex to extract the path for
-     * @return the shortest path for the specified vertex as a Route object
+     * @param distances a HashMap containing distances and parent vertices
+     * @param destination the destination vertex for which the Route object is to be returned
+     * @return the Route object for the given destination vertex
      */
     private Route<K> getParents(HashMap<K, Route<K>> distances, K destination) {
         return distances.get(destination);
     }
 
+    /**
+     * Creates a new HashMap based on the type of adjacencyMap.
+     *
+     * @return a new HashMap based on the type of adjacencyMap
+     * @throws IllegalArgumentException if the type of adjacencyMap is invalid
+     */
     private HashMap<K, Integer> createHashMap() {
         if (adjacencyMap instanceof LinkedListHashMap<K, HashMap<K, Integer>>) {
             return new LinkedListHashMap<>();

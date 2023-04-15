@@ -7,17 +7,16 @@ import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
 import experiments.Vehicle;
-
 import java.util.Random;
 
 /**
-
- Utility class for various graph operations
+ * This class contains various utility methods for working with graphs.
  */
 public class Util {
 
     /**
-     * Print the graph in the form of adjacency list
+     * Prints the given graph in the form of an adjacency list.
+     *
      * @param graph the graph to be printed
      */
     public static void printGraph(HashMapGraph<Vehicle> graph){
@@ -34,7 +33,8 @@ public class Util {
     }
 
     /**
-     * Pick a random key from the graph
+     * Picks a random key from the given graph.
+     *
      * @param graph the graph to pick from
      * @return a randomly picked key
      */
@@ -47,7 +47,8 @@ public class Util {
     }
 
     /**
-     * Print the shortest path distances and paths for each key in the graph
+     * Prints the shortest path distances and paths for each key in the given map.
+     *
      * @param distances the shortest path distances and paths for each key
      */
     public static void printShortestPath(LinkedListHashMap<Vehicle, Route<Vehicle>> distances){
@@ -59,7 +60,8 @@ public class Util {
     }
 
     /**
-     * Print the path
+     * Prints the given path.
+     *
      * @param route the path to be printed
      */
     public static void printPath(Route<Vehicle> route){

@@ -8,7 +8,11 @@ public class Vehicle implements Comparable<Vehicle> {
     private final String vehicleId;
     private final int speed;
 
-
+    /**
+     * Constructs a new Vehicle object with the given ID.
+     *
+     * @param vehicleId the ID of the vehicle
+     */
     public Vehicle(String vehicleId) {
         this(vehicleId, 0);
     }
@@ -42,6 +46,11 @@ public class Vehicle implements Comparable<Vehicle> {
         return this.speed;
     }
 
+    /**
+     * Returns a string representation of the Vehicle object.
+     *
+     * @return a string representation of the Vehicle object
+     */
     @Override
     public String toString() {
         return "Vehicle{" +
@@ -50,6 +59,13 @@ public class Vehicle implements Comparable<Vehicle> {
                 '}';
     }
 
+    /**
+     * Compares this Vehicle object to the specified object for order.
+     *
+     * @param o the object to be compared
+     * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+     * @throws ClassCastException if the specified object's type prevents it from being compared to this object.
+     */
     @Override
     public int compareTo(Vehicle o) {
         if (this == o) {
