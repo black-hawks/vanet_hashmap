@@ -1,6 +1,7 @@
 # VANET implementation using Hashmap
 
 > Please find Java Doc here: target/site/apidocs/index.html
+>
 > Please find UML diagram here: https://github.com/black-hawks/vanet_hashmap/blob/main/DataStructure_UML.png
 
 VANET, which stands for Vehicular ad hoc network, is a subset of mobile ad hoc networks. It is composed of vehicles and roadside units (RSU) as network nodes and enables cars equipped with communication technology to perform inter-vehicular communication (V2V) as well as roadside-to-vehicle communication (RVC). Communication can also happen between Vehicles and Pedestrians (V2P).
