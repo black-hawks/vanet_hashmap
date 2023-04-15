@@ -1,20 +1,24 @@
 package dataStructure.hashMap;
 
+import dataStructure.hashMap.hashFunction.HashFunction;
+import dataStructure.hashMap.hashFunction.Modulus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class LinkedListHashMap<K, V> implements HashMap<K, V> {
-    private static final int DEFAULT_CAPACITY = 16;
-    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
-    private static final boolean DEFAULT_RESIZABLE = true;
+    public static final int DEFAULT_CAPACITY = 16;
+    public static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    public static final boolean DEFAULT_RESIZABLE = true;
     private final float loadFactor;
     private int capacity;
     private int size;
     private final boolean resizable;
 
     private Node<K, V>[] table;
+    private HashFunction<K> hashFunction;
 
-    public LinkedListHashMap(int initialCapacity, boolean resizable, float loadFactor) {
+    public LinkedListHashMap(int initialCapacity, boolean resizable, float loadFactor, HashFunction<K> hashFunction) {
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal initial capacity: " +
                     initialCapacity);
@@ -24,6 +28,7 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
         this.loadFactor = loadFactor;
         this.capacity = initialCapacity;
         this.resizable = resizable;
+        this.hashFunction = hashFunction;
         //noinspection unchecked
         this.table = new Node[this.capacity];
     }
@@ -34,11 +39,16 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
     }
 
     public LinkedListHashMap(int initialCapacity) {
-        this(initialCapacity, DEFAULT_RESIZABLE, DEFAULT_LOAD_FACTOR);
+        this(initialCapacity, DEFAULT_RESIZABLE);
     }
 
     public LinkedListHashMap() {
-        this(DEFAULT_CAPACITY, DEFAULT_RESIZABLE, DEFAULT_LOAD_FACTOR);
+        this(DEFAULT_CAPACITY);
+    }
+
+
+    public LinkedListHashMap(int capacity, boolean resizable, float loadFactor) {
+        this(capacity, resizable, loadFactor, new Modulus<>());
     }
 
     public int size() {
@@ -124,7 +134,7 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
         for (int i = 0; i < capacity; i++) {
             Node<K, V> curr = table[i];
             while (curr != null) {
-                int index = Math.abs(curr.key.hashCode() % newCapacity);
+                int index = this.hashFunction.hash(curr.key, newCapacity);
                 Node<K, V> entry = new Node<>(curr.key, curr.value);
                 if (newTable[index] == null) {
                     newTable[index] = entry;
@@ -180,6 +190,6 @@ public class LinkedListHashMap<K, V> implements HashMap<K, V> {
     }
 
     private int hash(K key) {
-        return Math.abs(key.hashCode() % capacity);
+        return this.hashFunction.hash(key, capacity);
     }
 }

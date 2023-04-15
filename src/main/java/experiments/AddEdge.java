@@ -1,4 +1,4 @@
-package experiments.graph;
+package experiments;
 
 import dataStructure.graph.Graph;
 import dataStructure.graph.adjacencyListGraph.AdjacencyListGraph;

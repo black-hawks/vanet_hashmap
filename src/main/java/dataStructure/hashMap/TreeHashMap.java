@@ -1,24 +1,28 @@
 package dataStructure.hashMap;
 
+import dataStructure.hashMap.hashFunction.HashFunction;
+import dataStructure.hashMap.hashFunction.Modulus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
-    private static final int DEFAULT_CAPACITY = 16;
-    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
-    private static final boolean DEFAULT_RESIZABLE = true;
+    public static final int DEFAULT_CAPACITY = 16;
+    public static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    public static final boolean DEFAULT_RESIZABLE = true;
     private Node<K, V>[] table;
     private int size;
     private int capacity;
     private final float loadFactor;
     private final boolean resizable;
+    private HashFunction<K> hashFunction;
 
     public TreeHashMap() {
-        this(DEFAULT_CAPACITY, DEFAULT_RESIZABLE, DEFAULT_LOAD_FACTOR);
+        this(DEFAULT_CAPACITY);
     }
 
     public TreeHashMap(int capacity) {
-        this(capacity, DEFAULT_RESIZABLE, DEFAULT_LOAD_FACTOR);
+        this(capacity, DEFAULT_RESIZABLE);
     }
 
 
@@ -26,7 +30,12 @@ public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
         this(capacity, resizable, DEFAULT_LOAD_FACTOR);
     }
 
-    public TreeHashMap(int initialCapacity, boolean resizable, float loadFactor) {
+
+    public TreeHashMap(int capacity, boolean resizable, float loadFactor) {
+        this(capacity, resizable, loadFactor, new Modulus<>());
+    }
+
+    public TreeHashMap(int initialCapacity, boolean resizable, float loadFactor, HashFunction<K> hashFunction) {
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal initial capacity: " +
                     initialCapacity);
@@ -36,6 +45,7 @@ public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
         this.loadFactor = loadFactor;
         this.capacity = initialCapacity;
         this.resizable = resizable;
+        this.hashFunction = hashFunction;
         //noinspection unchecked
         table = new Node[initialCapacity];
     }
@@ -73,7 +83,7 @@ public class TreeHashMap<K extends Comparable<K>, V> implements HashMap<K, V> {
     }
 
     private int hash(K key) {
-        return Math.abs(key.hashCode() % table.length);
+        return this.hashFunction.hash(key, capacity);
     }
 
     private Node<K, V> insert(Node<K, V> node, K key, V value) {
