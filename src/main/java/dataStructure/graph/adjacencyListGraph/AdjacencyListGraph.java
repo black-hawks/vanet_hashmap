@@ -2,23 +2,41 @@ package dataStructure.graph.adjacencyListGraph;
 
 import dataStructure.graph.Graph;
 import dataStructure.graph.Route;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * A class that implements the Graph interface using an adjacency list to represent the graph.
+ *
+ * @param <V> the type of vertices in the graph
+ */
 public class AdjacencyListGraph<V> implements Graph<V> {
 
-    private List<V> vertices;
-    private List<Node<V, Edge<V>>> adjacencyList;
+    /**
+     * The list of vertices in the graph.
+     */
+    private final List<V> vertices;
 
+    /**
+     * The adjacency list of the graph, which stores the edges for each vertex in the form of a list of Node objects.
+     */
+    private final List<Node<V, Edge<V>>> adjacencyList;
+
+    /**
+     * Constructs an empty graph.
+     */
     public AdjacencyListGraph() {
         vertices = new ArrayList<>();
         adjacencyList = new ArrayList<>();
     }
 
-
+    /**
+     * Adds a vertex to the graph if it is not already present.
+     *
+     * @param vertex the vertex to add
+     */
     @Override
     public void addVertex(V vertex) {
         if (!vertices.contains(vertex)) {
@@ -28,9 +46,13 @@ public class AdjacencyListGraph<V> implements Graph<V> {
     }
 
     /**
-     * @param source
-     * @param destination
-     * @param weight
+     * Adds an edge between two vertices with the specified weight. If the vertices do not already exist in the graph,
+     * they are added.
+     *
+     * @param source      the source vertex of the edge
+     * @param destination the destination vertex of the edge
+     * @param weight      the weight of the edge
+     * @throws IllegalArgumentException if either the source or destination vertex is not found in the graph
      */
     @Override
     public void addEdge(V source, V destination, Integer weight) {
@@ -56,7 +78,9 @@ public class AdjacencyListGraph<V> implements Graph<V> {
     }
 
     /**
-     * @param vertex
+     * Removes a vertex and all its incident edges from the graph.
+     *
+     * @param vertex the vertex to remove
      */
     @Override
     public void removeVertex(V vertex) {
@@ -76,10 +100,12 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         adjacencyList.remove(indexToRemove);
     }
 
-
     /**
-     * @param source
-     * @param destination
+     * Removes an edge between two vertices from the graph.
+     *
+     * @param source      the source vertex of the edge
+     * @param destination the destination vertex of the edge
+     * @throws IllegalArgumentException if either the source or destination vertex is not found in the graph
      */
     @Override
     public void removeEdge(V source, V destination) {
@@ -100,6 +126,12 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         destinationNode = removeEdgeFromList(destinationNode);
     }
 
+    /**
+     * Removes all edges from the given node's edge list whose vertex matches the node's own vertex.
+     *
+     * @param node the node whose edge list is to be modified.
+     * @return the modified node object.
+     */
     private Node<V, Edge<V>> removeEdgeFromList(Node<V, Edge<V>> node) {
         for (Edge edge : node.getEdgeList())
             if (edge.getVertex().equals(edge))
@@ -107,13 +139,19 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         return node;
     }
 
+    /**
+     * Returns the adjacency list of the graph, which represents the relationships between nodes and their edges.
+     *
+     * @return The adjacency list of the graph.
+     */
     public List<Node<V, Edge<V>>> getAdjacencyList() {
         return adjacencyList;
     }
 
-
     /**
-     * @return
+     * Returns a list of all vertices in the graph.
+     *
+     * @return A list of all vertices in the graph.
      */
     @Override
     public List<V> getVertices() {
@@ -121,7 +159,9 @@ public class AdjacencyListGraph<V> implements Graph<V> {
     }
 
     /**
-     * @return
+     * Returns the number of vertices in the graph.
+     *
+     * @return The number of vertices in the graph.
      */
     @Override
     public int getNumberOfVertices() {
@@ -129,9 +169,14 @@ public class AdjacencyListGraph<V> implements Graph<V> {
     }
 
     /**
-     * @param source
-     * @param destination
-     * @return
+     * Returns the shortest path between the specified source and destination vertices using Breadth First Search (BFS)
+     * algorithm.
+     * If there is no path between the source and destination, it will print a message to the console.
+     *
+     * @param source the starting vertex of the path
+     * @param destination the destination vertex of the path
+     * @return a Route object representing the shortest path from the source to the destination, or null if
+     * no path was found
      */
     @Override
     public Route<V> shortestPath(V source, V destination) {
@@ -142,6 +187,14 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         return (getParents(distances, destination));
     }
 
+    /**
+     * Returns the shortest path to the specified destination vertex by traversing the list of vertices and
+     * their distances.
+     *
+     * @param distances the list of vertices and their distances from the source
+     * @param destination the destination vertex of the path
+     * @return a Route object representing the shortest path to the destination, or null if no path was found
+     */
     private Route<V> getParents(List<Pair<V, Route<V>>> distances, V destination) {
         for (Pair<V, Route<V>> node : distances) {
             if (node.getKey().equals(distances)) {
@@ -150,6 +203,17 @@ public class AdjacencyListGraph<V> implements Graph<V> {
         }
         return null;
     }
+
+    /**
+     * Performs Breadth First Search (BFS) algorithm on the graph, starting from the specified source vertex,
+     * to calculate the shortest path distances from the source vertex to all other vertices in the graph.
+     * The method returns a list of pairs where the first element of each pair is a vertex in the graph, and the
+     * second element is a Route object representing the shortest path from the source vertex to that vertex.
+     *
+     * @param source the starting vertex for the BFS algorithm
+     * @return a list of pairs, where the first element is a vertex in the graph, and the second element is a
+     * Route object representing the shortest path from the source vertex to that vertex
+     */
     public List<Pair<V, Route<V>>> bfs(V source) {
 
         List<Pair<V, Route<V>>> distances = new ArrayList<>();
@@ -195,6 +259,4 @@ public class AdjacencyListGraph<V> implements Graph<V> {
 
         return distances;
     }
-
-
 }
