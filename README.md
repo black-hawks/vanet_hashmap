@@ -1,5 +1,7 @@
 # VANET implementation using Hashmap
 
+> Please find Java Doc here: target/site/apidocs/index.html
+
 VANET, which stands for Vehicular ad hoc network, is a subset of mobile ad hoc networks. It is composed of vehicles and roadside units (RSU) as network nodes and enables cars equipped with communication technology to perform inter-vehicular communication (V2V) as well as roadside-to-vehicle communication (RVC). Communication can also happen between Vehicles and Pedestrians (V2P).
 
 The vehicle structure is represented as a graph in VANET. Each vehicle is represented in the graph by a vertex, while communication with another vehicle is represented by an edge. Because VANETs are typically utilized in emergency situations, the message has to arrive at its destination with as little delay as possible. However, due to the short range of the VANET connection (300-400m), the message is routed by forwarding it from one vehicle to another until it reaches the vehicles within the range. To determine the next forwarders in this type of routing, each vehicle must execute some computations on the graph topology. These computations must be based on rapid algorithms with minimal computation time complexity in order to achieve efficient and time-essential communication.
