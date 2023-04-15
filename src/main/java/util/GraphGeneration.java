@@ -31,10 +31,9 @@ public class GraphGeneration {
      * @param maxVertices number of vertices in the graph.
      * @return The generated graph.
      */
-    public static HashMapGraph<Vehicle> generateRandomWeightedGraph(
-            HashMap<Vehicle, HashMap<Vehicle, Integer>> hashMap, int maxVertices) {
+    public static Graph<Vehicle> generateRandomWeightedGraph(Graph<Vehicle> graph, int maxVertices) {
         List<VanetEntry> vanetData = generateVanetData(maxVertices);
-        return createGraph(hashMap, vanetData);
+        return createGraph(graph, vanetData);
     }
 
     /**
@@ -44,12 +43,12 @@ public class GraphGeneration {
      * @param maxVertices The maximum number of vertices to delete.
      * @return The updated graph.
      */
-    public static HashMapGraph<Vehicle> deleteVertices(HashMapGraph<Vehicle> graph, int maxVertices) {
+    public static Graph<Vehicle> deleteVertices(Graph<Vehicle> graph, int maxVertices) {
 
         // create a hashset to store the randomly selected keys
         Set<Vehicle> randomKeys = new HashSet<>();
 
-        Object[] keys = graph.getAdjacencyMap().keys().toArray();
+        Object[] keys = graph.getVertices().toArray();
 
         // generate random unique keys until the hashset contains 10 keys
         while (randomKeys.size() < maxVertices) {
@@ -59,20 +58,21 @@ public class GraphGeneration {
 
         // delete vertices
         for (Vehicle source : randomKeys) {
-            HashMap<Vehicle, Integer> innerMap = graph.getAdjacencyMap().get(source);
-            for (Entry<Vehicle, Integer> innerEntry : innerMap.entries()) {
-                Vehicle destination = innerEntry.getKey();
-                graph.removeEdge(source, destination);
+            if(graph instanceof HashMapGraph<Vehicle> hashMapGraph){
+                HashMap<Vehicle, Integer> innerMap = hashMapGraph.getAdjacencyMap().get(source);
+                for (Entry<Vehicle, Integer> innerEntry : innerMap.entries()) {
+                    Vehicle destination = innerEntry.getKey();
+                    graph.removeEdge(source, destination);
+                }
+                graph.removeVertex(source);
             }
-            graph.removeVertex(source);
         }
         return graph;
 
     }
 
-    public static HashMapGraph<Vehicle> createGraph(
-            HashMap<Vehicle, HashMap<Vehicle, Integer>> hashMap, List<VanetEntry> vanetData) {
-        HashMapGraph<Vehicle> graph = new HashMapGraph<>(hashMap);
+    public static Graph<Vehicle> createGraph(
+            Graph<Vehicle> graph, List<VanetEntry> vanetData) {
         for (VanetEntry vanetEntry : vanetData) {
             graph.addEdge(
                     vanetEntry.getSourceVehicle(),

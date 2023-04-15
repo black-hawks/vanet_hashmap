@@ -1,5 +1,6 @@
 package experiments.graph;
 
+import dataStructure.graph.Graph;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.HashMap;
 import dataStructure.hashMap.LinkedListHashMap;
@@ -19,12 +20,14 @@ public class AddEdge {
 
             long start = System.currentTimeMillis();
             HashMap<Vehicle, HashMap<Vehicle, Integer>> linkedListHashMap = new LinkedListHashMap<>(16, false);
-            HashMapGraph<Vehicle> linkedListGraph = GraphGeneration.createGraph(linkedListHashMap, vanetData);
+            Graph<Vehicle> linkedListHashMapGraph = new HashMapGraph<>(linkedListHashMap);
+            linkedListHashMapGraph = GraphGeneration.createGraph(linkedListHashMapGraph, vanetData);
             System.out.println("HashMap Graph based on Linked List took: " + (System.currentTimeMillis() - start) + "ms");
 
             start = System.currentTimeMillis();
             HashMap<Vehicle, HashMap<Vehicle, Integer>> treeHashMap = new TreeHashMap<>(16, false);
-            HashMapGraph<Vehicle> treeGraph = GraphGeneration.createGraph(treeHashMap, vanetData);
+            Graph<Vehicle> treeHashMapGraph = new HashMapGraph<>(linkedListHashMap);
+            treeHashMapGraph = GraphGeneration.createGraph(treeHashMapGraph, vanetData);
             System.out.println("HashMap Graph based on Tree took: " + (System.currentTimeMillis() - start) + "ms");
 
             System.out.println();

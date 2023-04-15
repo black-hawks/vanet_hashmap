@@ -1,5 +1,6 @@
 package simulation;
 
+import dataStructure.graph.Graph;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.graph.Route;
 import dataStructure.hashMap.HashMap;
@@ -8,6 +9,7 @@ import util.GraphGeneration;
 import util.Util;
 
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * The Main class simulates a scenario where vehicles in a range send messages to each other
@@ -22,16 +24,17 @@ public class Main {
      */
     public static void simulate(int numberOfVertices) {
 
-        HashMapGraph<Vehicle> graph;
+//        Graph<Vehicle> graph;
         Random random = new Random();
         int delCount = (int) (numberOfVertices / 1.25);
 
 
         System.out.println();
         System.out.println("Simulating for code when there are " + numberOfVertices + " Vehicles in the range");
-        HashMap<Vehicle, HashMap<Vehicle, Integer>> hashMap = new TreeHashMap<>();
+        HashMap<Vehicle, HashMap<Vehicle, Integer>> treeHashMap = new TreeHashMap<>();
+        Graph<Vehicle> graph = new HashMapGraph<>(treeHashMap);
         //HashMapGraph Generation
-        graph = GraphGeneration.generateRandomWeightedGraph(hashMap, numberOfVertices);
+        graph = GraphGeneration.generateRandomWeightedGraph(graph, numberOfVertices);
 
         //picking two random Vehicle
         Vehicle randomVehicle = Util.pickRandomVehicle(graph);

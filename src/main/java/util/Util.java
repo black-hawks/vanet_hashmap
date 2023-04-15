@@ -1,5 +1,6 @@
 package util;
 
+import dataStructure.graph.Graph;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.graph.Route;
 import dataStructure.hashMap.Entry;
@@ -37,8 +38,8 @@ public class Util {
      * @param graph the graph to pick from
      * @return a randomly picked key
      */
-    public static Vehicle pickRandomVehicle(HashMapGraph<Vehicle> graph){
-        Object[] keys = graph.getAdjacencyMap().keys().toArray();
+    public static Vehicle pickRandomVehicle(Graph<Vehicle> graph){
+        Object[] keys = graph.getVertices().toArray();
         Random rand = new Random();
         Vehicle randomVehicle = (Vehicle) keys[rand.nextInt(keys.length)];
 
