@@ -12,4 +12,5 @@ public interface Graph<V> {
 
     public void removeEdge(V source, V destination);
 
+    public Route<V> shortestPath(V source, V destination);
 }

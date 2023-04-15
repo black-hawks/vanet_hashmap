@@ -2,6 +2,7 @@ package dataStructure.graph.hashMapGraph;
 
 
 import dataStructure.graph.Graph;
+import dataStructure.graph.Route;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.LinkedListHashMap;
 import java.util.*;
@@ -36,8 +37,8 @@ public class HashMapGraph<K> implements Graph<K> {
 
     /**
 
-     Adds a vertex to the graph if it doesn't already exist.
-     @param vertex the vertex to be added
+     Adds a key to the graph if it doesn't already exist.
+     @param vertex the key to be added
      */
     public void addVertex(K vertex) {
         if (!adjacencyMap.containsKey(vertex)) {
@@ -49,8 +50,8 @@ public class HashMapGraph<K> implements Graph<K> {
 
      Adds an edge between two vertices with the given weight.
      If the vertices don't exist, they are added to the graph.
-     @param source the source vertex
-     @param destination the destination vertex
+     @param source the source key
+     @param destination the destination key
      @param weight the weight of the edge
      */
     public void addEdge(K source, K destination, Integer weight) {
@@ -62,8 +63,8 @@ public class HashMapGraph<K> implements Graph<K> {
 
     /**
 
-     Removes a vertex from the graph, including all its edges.
-     @param vertex the vertex to be removed
+     Removes a key from the graph, including all its edges.
+     @param vertex the key to be removed
      */
     public void removeVertex(K vertex) {
         if (adjacencyMap.containsKey(vertex)) {
@@ -76,8 +77,8 @@ public class HashMapGraph<K> implements Graph<K> {
     /**
 
      Removes an edge between two vertices, if it exists.
-     @param source the source vertex
-     @param destination the destination vertex
+     @param source the source key
+     @param destination the destination key
      */
     public void removeEdge(K source, K destination) {
         if (adjacencyMap.containsKey(source) && adjacencyMap.get(source).containsKey(destination)) {
@@ -106,12 +107,12 @@ public class HashMapGraph<K> implements Graph<K> {
 
     /**
 
-     Computes and returns the shortest paths from the given source vertex to all other vertices in the graph,
+     Computes and returns the shortest paths from the given source key to all other vertices in the graph,
      using the Breadth-First Search (BFS) algorithm.
 
      The distances are represented by Route objects containing the distance and the path of vertices.
-     @param source the source vertex
-     @return a HashMap containing the shortest routes from the source to each vertex
+     @param source the source key
+     @return a HashMap containing the shortest routes from the source to each key
      */
     public LinkedListHashMap<K, Route<K>> bfs(K source) {
         LinkedListHashMap<K, Route<K>> distances = new LinkedListHashMap<>();
@@ -164,9 +165,9 @@ public class HashMapGraph<K> implements Graph<K> {
 
     /**
 
-     Returns the shortest path between a source vertex and a destination vertex in the graph.
-     @param source the source vertex
-     @param destination the destination vertex
+     Returns the shortest path between a source key and a destination key in the graph.
+     @param source the source key
+     @param destination the destination key
      @return the shortest path between the source and destination vertices as a Route object
      */
     public Route<K> shortestPath(K source, K destination) {
@@ -178,11 +179,11 @@ public class HashMapGraph<K> implements Graph<K> {
     /**
 
      Helper method to extract the shortest path from the distances map.
-     @param distances a HashMap containing the distances and paths for all vertices from the source vertex
-     @param destination the vertex to extract the path for
-     @return the shortest path for the specified vertex as a Route object
+     @param distances a HashMap containing the distances and paths for all vertices from the source key
+     @param destination the key to extract the path for
+     @return the shortest path for the specified key as a Route object
      */
-    public Route<K> getParents(LinkedListHashMap<K, Route<K>> distances, K destination) {
+    private Route<K> getParents(LinkedListHashMap<K, Route<K>> distances, K destination) {
        return distances.get(destination);
     }
 

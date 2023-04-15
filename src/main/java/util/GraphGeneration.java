@@ -1,5 +1,6 @@
 package util;
 
+import dataStructure.graph.Graph;
 import dataStructure.graph.hashMapGraph.HashMapGraph;
 import dataStructure.hashMap.Entry;
 import dataStructure.hashMap.LinkedListHashMap;
